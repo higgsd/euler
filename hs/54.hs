@@ -1,6 +1,6 @@
 -- 376
-import Data.List(sort, group)
 import Data.Char(ord)
+import Data.List(sort, group)
 
 makeHands xs = map (splitAt 5 . words) $ lines $ filter (\c -> c /= '\r') xs
 

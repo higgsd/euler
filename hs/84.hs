@@ -1,7 +1,7 @@
 -- 101524
-import Data.Ratio((%))
 import Data.Function(on)
 import Data.List(sortBy, groupBy)
+import Data.Ratio((%))
 import Text.Printf(printf)
 
 squareNames = ["GO", "A1", "CC1", "A2", "T1",

@@ -1,6 +1,6 @@
 -- 20313839404245
-import Data.List(sortBy)
 import Data.Function(on)
+import Data.List(sortBy)
 import Euler(isSpecialSumSet)
 
 ss = [20, 31, 38, 39, 40, 42, 45]

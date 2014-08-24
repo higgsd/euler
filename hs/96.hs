@@ -1,8 +1,8 @@
 -- 24702
 import Data.Array(listArray, range, (!), (//))
-import Data.List(delete, nub, sortBy, groupBy)
-import Data.Function(on)
 import Data.Char(ord)
+import Data.Function(on)
+import Data.List(delete, nub, sortBy, groupBy)
 
 nn = 9
 bb = ((0,0),(nn-1,nn-1))

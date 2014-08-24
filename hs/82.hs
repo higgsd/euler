@@ -1,6 +1,6 @@
 -- 260324
-import Euler(loadMatrixFile)
 import Data.List(transpose)
+import Euler(loadMatrixFile)
 
 sumCell xx y yy
     | y == -1 = -1

@@ -1,6 +1,6 @@
 -- 26033
-import Data.List(groupBy, subsequences, intersect)
 import Data.Function(on)
+import Data.List(groupBy, subsequences, intersect)
 import Data.Map(fromList, toList, findWithDefault)
 import Euler(isPrimeSimple, primeSieve)
 

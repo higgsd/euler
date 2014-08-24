@@ -1,6 +1,6 @@
 -- 709
-import Data.List(sortBy)
 import Data.Function(on)
+import Data.List(sortBy)
 import Euler(splitOn)
 
 parseBaseExp ws = [(a,b,n+1) | n <- [0..length ws-1],

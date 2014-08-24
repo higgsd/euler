@@ -1,6 +1,6 @@
 -- 18769
-import Data.List(nub, subsequences, sort, sortBy, groupBy)
 import Data.Function(on)
+import Data.List(nub, subsequences, sort, sortBy, groupBy)
 import Euler(loadWordFile)
 
 findAnagrams ws = map (map snd) $ filter (\x -> length x > 1) $

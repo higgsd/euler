@@ -1,6 +1,6 @@
 -- 1097343
-import Euler(intSqrt, primeSieve)
 import Data.List(sort, group)
+import Euler(intSqrt, primeSieve)
 
 nn = 50000000
 primes = primeSieve $ intSqrt nn

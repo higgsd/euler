@@ -1,6 +1,6 @@
 -- 127035954683
-import Data.List(groupBy, sort, sortBy)
 import Data.Function(on)
+import Data.List(groupBy, sort, sortBy)
 
 nn = 5
 

@@ -1,6 +1,6 @@
 -- 14316
-import Data.List(group)
 import Data.Array(listArray, bounds, (!))
+import Data.List(group)
 import Euler(intSqrt, primeSieve)
 
 nn = 1000000
