@@ -13,7 +13,7 @@ LDFLAGS += -lgmp
 
 .PHONY: all clean test
 all: $(PROGRAMS)
-euler.o: euler.h Makefile
+euler.o: euler.h queue.h tree.h Makefile
 $(PROGRAMS): euler.o
 
 test: $(PROGRAMS) $(addsuffix .test,$(PROGRAMS))
