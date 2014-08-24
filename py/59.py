@@ -1,5 +1,5 @@
 # 107359
-import sys, string
+import string
 N = 3
 s = ''.join([line.strip() for line in file('../files/cipher1.txt')])
 e = [int(v) for v in s.split(',')]
