@@ -3,6 +3,7 @@ import Data.Function(on)
 import Data.List(sortBy)
 import Euler(isSpecialSumSet)
 
+-- search for solutions near the near-match algorithm results
 ss = [20, 31, 38, 39, 40, 42, 45]
 
 genSets0 [] ys = [ys]

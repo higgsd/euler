@@ -1,4 +1,6 @@
 -- 37076114526
+-- solve simultaneous equations w/ gaussian elimination
+
 import Data.Ratio((%),numerator,denominator)
 
 pp = [1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1]
@@ -16,6 +18,7 @@ combRow m src f dst = a ++ [b] ++ c
           b1 = m !! dst
           b2 = map (*f) (m !! src)
 
+-- put matrix in triangular form
 makeTri0 m src dst
     | src >= k = m
     | dst >= k = makeTri0 mx (src+1) (src+2)
@@ -27,6 +30,7 @@ makeTri0 m src dst
           mx = combRow m src f dst
 makeTri m = makeTri0 m 0 1
 
+-- convert matrix to identity (solved)
 makeIdent0 m src dst
     | src < 0 = m
     | dst < 0 = makeIdent0 m (src-1) (src-1)
