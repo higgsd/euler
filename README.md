@@ -8,6 +8,12 @@ I am not below using Google to find hints (e.g. what class of problem is this?)
 or approaches (e.g. what is a faster alternative to brute-force for a step?),
 but prefer to avoid wholesale copying in favor of understanding and rewriting.
 
+This code is BSD-licensed as described in the LICENSE file, unless otherwise
+noted in an individual file.  Files in the 'files' directory were downloaded
+from Project Euler and are presumably under a Creative Commons Licence:
+Attribution-NonCommercial-ShareAlike 2.0 UK: England & Wales, as per
+https://projecteuler.net/copyright .
+
 C
 -----
 
