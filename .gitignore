@@ -1,0 +1,7 @@
+# C
+*.o
+# Python
+*.pyc
+# Haskell
+*.hi
+*.prof
