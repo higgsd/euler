@@ -1,17 +1,21 @@
--- 
-import Data.List(sort, group)
+-- 329468
+import Euler(digitUsage)
 
-nn = 1234
+genLowerFib0 n a b = (n,c) : genLowerFib0 (n+1) b c
+    where c = (a + b) `mod` (10^9)
+genLowerFib = (0,0):(1,1):(2,1):genLowerFib0 3 1 1
 
-digitUsagePad n p = strDigitUsage (s ++ replicate (p - length s) '0')
-    where s = show n
-digitUsage n = strDigitUsage $ show n
+calcUpperFib n = f
+    where phi = (1 + sqrt 5) / 2
+          logPhi = logBase 10 phi
+          logSqrt5 = logBase 10 $ sqrt 5
+          x = (fromIntegral n) * logPhi - logSqrt5
+          p = x - fromIntegral (floor x) + 8
+          f = round $ 10 ** p
 
-strDigitUsage s = countDigit "0123456789" $ group $ sort s
-    where countDigit [] _ = []
-          countDigit (_:cs) [] = 0 : countDigit cs []
-          countDigit (c:cs) (x:xs)
-            | c == head x = length x : countDigit cs xs
-            | otherwise = 0 : countDigit cs (x:xs)
+findFib = map fst $ filter (\(_,n) -> isPandigital n) genUpperFib
+    where isPandigital n = digitUsage 123456789 == digitUsage n
+          genUpperFib = map (\n -> (n, calcUpperFib n)) getFibK
+          getFibK = map fst $ filter (\(_,n) -> isPandigital n) genLowerFib
 
-main = putStrLn $ show $ digitUsagePad nn 5
+main = putStrLn $ show $ head $ findFib

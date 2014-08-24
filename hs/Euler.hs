@@ -67,28 +67,15 @@ loadWordFile fname = do
 wordScore word = sum $ map alphaOrd word
     where alphaOrd c = ord c - ord 'A' + 1
 
--- strDigitUsage [] 0 = 0
--- strDigitUsage _ 0 = error "strDigitUsage: chars left"
--- strDigitUsage [] _ = 1
--- strDigitUsage (c:s) d = n .|. strDigitUsage s (d-1)
---     where n = shift 1 $ ord c - ord '0'
-
--- digitUsage :: Integer -> Integer -> Integer
--- digitUsage n d
---     | d == 0 = strDigitUsage s $ length s
---     | otherwise = strDigitUsage s d
---     where s = show n
-
-strDigitUsage s = countDigit "0123456789" $ group $ sort s
+digitUsageStr s = countDigit "0123456789" $ group $ sort s
     where countDigit [] _ = []
           countDigit (_:cs) [] = 0 : countDigit cs []
           countDigit (c:cs) (x:xs)
             | c == head x = length x : countDigit cs xs
             | otherwise = 0 : countDigit cs (x:xs)
-
-digitUsagePad n p = strDigitUsage (s ++ replicate (p - length s) '0')
+digitUsagePad n p = digitUsageStr (s ++ replicate (p - length s) '0')
     where s = show n 
-digitUsage n = strDigitUsage $ show n
+digitUsage n = digitUsageStr $ show n
 
 solveQuadratic a b c
     | r1 >= 0 = r1
