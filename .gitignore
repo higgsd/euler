@@ -1,5 +1,9 @@
 # editor
 *.swp
+*~
+# patching
+*.orig
+*.rej
 # C
 *.o
 # Python
