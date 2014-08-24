@@ -20,7 +20,7 @@ int main(int argc, char **argv)
     }
 
     char *tok, *tmp;
-    char *input = load_file("../words.txt");
+    char *input = load_file("../files/words.txt");
     tok = strtok_r(input, ",", &tmp);
     while (tok != NULL)
     {

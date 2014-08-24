@@ -38,5 +38,5 @@ bestValidSquare ws = maximum $ map read xs
     where xs = concatMap validSquares $ findAnaPairs ws
 
 main = do
-    ws <- loadWordFile "../p098_words.txt"
+    ws <- loadWordFile "../files/p098_words.txt"
     putStrLn $ show $ bestValidSquare ws

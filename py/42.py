@@ -2,7 +2,7 @@
 import euler
 m = 0
 s = {}
-for word in euler.load_word_file('../words.txt'):
+for word in euler.load_word_file('../files/words.txt'):
     v = euler.word_score(word)
     if s.has_key(v):
         s[v] += 1

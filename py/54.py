@@ -26,7 +26,7 @@ def kind(cards):
     return f[::-1]
 
 m = 0
-for hand in [line.split() for line in file('../poker.txt')]:
+for hand in [line.split() for line in file('../files/poker.txt')]:
     cards = [(c2v[c[0]], c[1]) for c in hand]
     p1, p2 = cards[:5], cards[5:]
     p1.sort()

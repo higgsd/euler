@@ -10,5 +10,5 @@ sumSpecialSets ws = sum $ concat spec
           spec = filter isSpecialSumSet sets
 
 main = do
-    contents <- readFile "../p105_sets.txt"
+    contents <- readFile "../files/p105_sets.txt"
     putStrLn $ show $ sumSpecialSets $ lines contents

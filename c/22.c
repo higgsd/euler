@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     struct name *n;
     struct name_list names;
 
-    char *input = load_file("../names.txt");
+    char *input = load_file("../files/names.txt");
     RB_INIT(&names);
 
     char *tok, *tmp;

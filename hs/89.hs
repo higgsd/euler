@@ -36,5 +36,5 @@ toRoman n
 compareRoman w = length w - (length . toRoman . fromRoman) w
 
 main = do
-    contents <- readFile "../roman.txt"
+    contents <- readFile "../files/roman.txt"
     putStrLn $ show $ sum $ map compareRoman $ lines contents

@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     int i, j;
     int tri[N][N];
     char *tok1, *tok2, *t1, *t2;
-    char *f = load_file("../triangle.txt");
+    char *f = load_file("../files/triangle.txt");
 
     tok1 = strtok_r(f, "\n", &t1);
     for (i = 0; i < N; i++)

@@ -11,7 +11,7 @@
 int main(int argc, char **argv)
 {
     char *tok, *tmp;
-    char *input = load_file("../cipher1.txt");
+    char *input = load_file("../files/cipher1.txt");
 
     int len = 0;
     char *s = strdup(input);

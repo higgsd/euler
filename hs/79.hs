@@ -28,5 +28,5 @@ shortKeySearch xs
 findShortestKey k = reverse $ shortKeySearch [("",k)]
 
 main = do
-    contents <- readFile "../keylog.txt"
+    contents <- readFile "../files/keylog.txt"
     putStrLn $ findShortestKey $ lines contents

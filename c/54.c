@@ -107,7 +107,7 @@ int main(int argc, char **argv)
     char vals[P][H], suits[P][H];
     int flush[P], straight[P], win;
     char counts[P][H], cvals[P][H];
-    char *input= load_file("../poker.txt");
+    char *input= load_file("../files/poker.txt");
 
     m = 0;
     tok = strtok_r(input, " \r\n", &tmp);

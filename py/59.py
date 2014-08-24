@@ -1,7 +1,7 @@
 # 107359
 import sys, string
 N = 3
-s = ''.join([line.strip() for line in file('../cipher1.txt')])
+s = ''.join([line.strip() for line in file('../files/cipher1.txt')])
 e = [int(v) for v in s.split(',')]
 ks = [list() for n in range(N)]
 for k in range(ord('a'), ord('z') + 1):

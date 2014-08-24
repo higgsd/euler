@@ -9,5 +9,5 @@ genTri n t
 isTri n = genTri n 1
 
 main = do
-    ws <- loadWordFile "../words.txt"
+    ws <- loadWordFile "../files/words.txt"
     putStrLn $ show $ length $ filter isTri $ map wordScore ws

@@ -18,5 +18,5 @@ numWithOrigin ws = length $ filter id os
           os = map containsOrigin ts
 
 main = do
-    contents <- readFile "../p102_triangles.txt"
+    contents <- readFile "../files/p102_triangles.txt"
     putStrLn $ show $ numWithOrigin $ lines contents

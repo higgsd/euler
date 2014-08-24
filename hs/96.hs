@@ -73,6 +73,6 @@ boardResults bs = sum $ map calcResults $ solveBoards bs
           calcResults b = sum $ zipWith (*) [100,10,1] $ getResults b
 
 main = do
-    contents <- readFile "../p096_sudoku.txt"
+    contents <- readFile "../files/p096_sudoku.txt"
     let boards = parseBoards $ lines contents
     putStrLn $ show $ boardResults boards

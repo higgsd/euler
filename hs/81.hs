@@ -26,5 +26,5 @@ bestPath m = bestPath0 m s
           nc = length $ head m
 
 main = do
-    m <- loadMatrixFile "../matrix.txt"
+    m <- loadMatrixFile "../files/matrix.txt"
     putStrLn $ show $ bestPath m

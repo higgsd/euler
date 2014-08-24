@@ -9,5 +9,5 @@ sumTri (x:y:ys) = sumTri (yy:ys)
 sumTri _ = error "unreachable"
 
 main = do
-    tri <- readFile "../triangle.txt"
+    tri <- readFile "../files/triangle.txt"
     putStrLn $ show $ sumTri $ readTri tri

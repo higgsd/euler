@@ -20,5 +20,5 @@ decode xs = head [tx | ks <- genKeys, let tx = xorText xs ks,
 asciiScore xs = sum $ map ord xs
 
 main = do
-    contents <- readFile "../cipher1.txt"
+    contents <- readFile "../files/cipher1.txt"
     putStrLn $ show $ asciiScore $ decode $ parseText contents

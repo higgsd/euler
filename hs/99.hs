@@ -13,5 +13,5 @@ findLargest ws = snd $ last $ sortBy (compare `on` fst) $
     where logBaseExp (a,b,n) = (b * log a, n)
 
 main = do
-    ns <- readFile "../p099_base_exp.txt"
+    ns <- readFile "../files/p099_base_exp.txt"
     putStrLn $ show $ findLargest $ lines ns
