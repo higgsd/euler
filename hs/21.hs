@@ -1,5 +1,5 @@
 -- 31626
-import Euler
+import Euler(allFactors)
 
 factorSum n = sum $ drop 1 $ reverse $ allFactors n
 isAmicable a = a /= b && a == db

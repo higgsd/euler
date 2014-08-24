@@ -1,5 +1,5 @@
 -- 1322
-import Euler
+import Euler(intSqrt)
 
 nn = 10000
 

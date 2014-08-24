@@ -1,5 +1,5 @@
 -- 76576500
-import Euler
+import Euler(countFactors)
 
 findTri (t,i)
     | countFactors t > 500 = t

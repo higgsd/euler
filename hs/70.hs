@@ -1,6 +1,6 @@
 -- 8319823
-import Euler
 import Data.List(sort)
+import Euler(intSqrt, primeSieve)
 
 -- lowest phi will be produced by multiplying two primes closest to nn
 -- reduce search space by only considering primes "near" sqrt(nn)

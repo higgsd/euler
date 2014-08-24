@@ -1,8 +1,8 @@
 -- 26033
-import Euler
 import Data.List(groupBy, subsequences, intersect)
 import Data.Function(on)
 import Data.Map(fromList, toList, findWithDefault)
+import Euler(isPrimeSimple, primeSieve)
 
 nn = 5
 mm = 10000

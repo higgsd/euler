@@ -1,6 +1,6 @@
 -- 7652413
-import Euler
 import Data.List(sort, permutations)
+import Euler(isPrimeSimple)
 
 nn = 7
 

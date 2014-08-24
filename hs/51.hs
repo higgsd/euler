@@ -1,8 +1,8 @@
 -- 121313
-import Euler
 import Data.Array(listArray, elems, (//))
 import Data.List(sortBy, groupBy, subsequences)
 import Data.Function(on)
+import Euler(primeSieve)
 
 nn = 8
 dd = 6

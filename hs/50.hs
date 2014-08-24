@@ -1,6 +1,6 @@
 -- 997651
-import Euler
 import Data.Array(listArray, (!), (//))
+import Euler(primeSieve)
 
 nn = 1000000
 primesN = primeSieve nn

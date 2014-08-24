@@ -1,6 +1,6 @@
 -- 4179871
-import Euler
 import Data.Array(listArray, (!))
+import Euler(allFactors)
 
 n = 28123
 

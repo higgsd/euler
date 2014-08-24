@@ -1,6 +1,6 @@
 -- -59231
-import Euler
 import Data.List(sort)
+import Euler(primeSieve)
 
 nn = 1000
 mm = 80

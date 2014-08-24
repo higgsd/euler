@@ -1,6 +1,6 @@
 -- 71
-import Euler
 import Data.List(sort,group)
+import Euler(primeSieve)
 
 mm = 5000
 nn = 100 -- guess

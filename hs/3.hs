@@ -1,5 +1,5 @@
 -- 6857
-import Euler
+import Euler(intSqrt, primeSieve)
 
 largestFactor n = head [ x | x <- primes, n `mod` x == 0 ]
     where primes = reverse $ primeSieve $ intSqrt n

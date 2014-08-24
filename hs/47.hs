@@ -1,5 +1,5 @@
 -- 134043
-import Euler
+import Euler(nfactorSieve)
 
 nn = 200000
 

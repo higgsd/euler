@@ -1,6 +1,6 @@
 -- 303963552391
-import Euler
 import Data.List(nub)
+import Euler(primeSieve, intSqrt)
 
 nn = 1000000
 primes = primeSieve $ intSqrt nn

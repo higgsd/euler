@@ -1,5 +1,5 @@
 -- 26241
-import Euler
+import Euler(isPrimeSimple)
 
 nn = 10
 

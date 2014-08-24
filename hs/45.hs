@@ -1,5 +1,5 @@
 -- 1533776805
-import Euler
+import Euler(isPentagonal, isTriangular)
 
 genHex = map calcHex [144..]
     where calcHex n = n * (2 * n - 1)

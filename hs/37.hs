@@ -1,6 +1,6 @@
 -- 748317
-import Euler
 import Data.List(inits, tails)
+import Euler(isPrimeSimple)
 
 nn = 11
 pfirst = ["2","3","5","7"]

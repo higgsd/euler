@@ -1,5 +1,5 @@
 -- 5777
-import Euler
+import Euler(isPrimeSimple, primeSieve)
 
 nn = 10000
 

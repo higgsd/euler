@@ -1,5 +1,5 @@
 -- 5482660
-import Euler
+import Euler(isPentagonal)
 
 genPent = filter even $ map calcPent [1..]
     where calcPent i = i * (3 * i - 1) `div` 2

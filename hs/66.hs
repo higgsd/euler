@@ -1,7 +1,7 @@
 -- 661
-import Euler
 import Data.List(maximumBy)
 import Data.Function(on)
+import Euler(intSqrt)
 
 nn = 1000
 

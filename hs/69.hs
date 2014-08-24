@@ -1,5 +1,5 @@
 -- 510510
-import Euler
+import Euler(primeSieve)
 
 nn = 1000000
 
@@ -11,8 +11,3 @@ maxPhi = map (product . flip take primes) [1..length primes]
     where primes = primeSieve 50
 
 main = putStrLn $ show $ last $ takeWhile (nn>) maxPhi
-
--- phi n = n - (length $ map head $ group $ sort $ concat $ map genMult $ factors)
---     where factors = filter (\p -> mod n p == 0) $ primeSieve nn
---           genMult f = map (f*) [1..n `div` f]
-

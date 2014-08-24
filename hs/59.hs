@@ -1,8 +1,8 @@
 -- 107359
-import Euler
 import Data.Char(isAscii, isAsciiLower, isPrint, chr, ord)
 import Data.Bits(xor)
 import Data.List(isInfixOf)
+import Euler(splitOn)
 
 parseText xs = map read $ splitOn ',' xs
 

@@ -1,5 +1,5 @@
 -- 162
-import Euler
+import Euler(loadWordFile, wordScore)
 
 genTri n t
     | x == n = True
