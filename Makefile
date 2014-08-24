@@ -1,9 +1,7 @@
-TESTS = $(addsuffix .test,$(shell jot 75))
-MAGIC = all clean $(TESTS)
+MAGIC = all clean test
 
-.PHONY: $(MAGIC) test
+.PHONY: $(MAGIC)
 $(MAGIC):
 	make -C c $@
 	make -C py $@
 	make -C hs $@
-test: $(TESTS)

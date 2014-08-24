@@ -1,7 +1,16 @@
 INPUT = $(wildcard [0-9]*.py)
+PROGRAMS = $(basename $(INPUT))
 
 %.test: %.py
-	@if [ "`head -n1 $< | cut -c3-`" != "`python $<`" ] ; then echo 'FAIL' && false ; fi
+	@echo -n $< '... '
+	@if [ "`head -n1 $< | cut -c3-`" != "`python $<`" ] ; then \
+		echo 'FAIL' && false ; \
+	else \
+		echo 'OK' ; \
+	fi
 
-.PHONY: all clean
-all clean:
+.PHONY: all clean test
+all:
+test: $(addsuffix .test,$(PROGRAMS))
+clean:
+	rm -f *.pyc
