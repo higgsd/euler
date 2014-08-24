@@ -9,7 +9,12 @@ GHCFLAGS += -fno-warn-type-defaults -fno-warn-missing-signatures
 	@touch $@
 
 %.test: %
-	@if [ "`head -n1 $<.hs | cut -c4-`" != "`./$<`" ] ; then echo 'FAIL' && false ; fi
+	@echo -n $< '... '
+	@if [ "`head -n1 $<.hs | cut -c4-`" != "`./$<`" ] ; then \
+		echo 'FAIL' && false ; \
+	else \
+		echo 'OK' ; \
+	fi
 
 .PHONY: all clean test
 all: $(PROGRAMS)
