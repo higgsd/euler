@@ -3,7 +3,7 @@ module Euler (
     allFactors, primeFactors,
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad,
-    solveQuadratic, isTriangular, isPentagonal,
+    solveQuadratic, isPentagonal,
     isSpecialSumSet
 ) where
 import Data.Char(ord)
@@ -76,9 +76,6 @@ solveQuadratic a b c
     where delta = sqrt (b * b - 4 * a * c)
           r1 = (delta - b) / (2 * a)
           r2 = (-delta - b) / (2 * a)
-
-isTriangular n = r == (fromIntegral $ floor r)
-    where r = solveQuadratic 0.5 0.5 (fromIntegral $ -n)
 
 isPentagonal n = r == (fromIntegral $ floor r)
     where r = solveQuadratic 1.5 (-0.5) (fromIntegral $ -n)
