@@ -68,7 +68,7 @@ nextMove s p = (stopDouble ++ nextSingle s p, againDouble)
 
 mergeMoveProbs xs = map addProbs $
                 groupBy ((==) `on` fst3) $
-                sortBy (compare `on` fst3) xs 
+                sortBy (compare `on` fst3) xs
     where fst3 (x,_,_) = x
           snd3 (_,x,_) = x
           addProbs [] = error "mergeMoveProbs: empty list"

@@ -22,7 +22,7 @@ searchChains ks n
           r2 = case Map.lookup ns ks of
                Nothing -> -1
                Just x -> x
-          
+
 buildChains0 mx n s ks
     | mx == n = s
     | otherwise = buildChains0 mx (n+1) (s+s2) ks2

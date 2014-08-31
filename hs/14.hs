@@ -1,5 +1,5 @@
 -- 837799
-import qualified Data.Map as Map  
+import qualified Data.Map as Map
 
 nextItem n
     | even n = n `div` 2
@@ -10,7 +10,7 @@ updateChain lut depth (c:cs) = updateChain nlut (depth+1) cs
     where nlut = Map.insert c depth lut
 
 findChain lut [] = lut
-findChain lut xs = case Map.lookup n lut of 
+findChain lut xs = case Map.lookup n lut of
     Nothing -> findChain lut (n:xs)
     Just depth -> updateChain lut (depth+1) xs
     where n = nextItem $ head xs

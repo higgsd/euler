@@ -3,9 +3,9 @@
 name n
     | n >= 1000 =
         name (n `div` 1000) ++ "thousand" ++ name (n `mod` 1000)
-    | n >= 100 && n `mod` 100 == 0 = 
+    | n >= 100 && n `mod` 100 == 0 =
         name (n `div` 100) ++ "hundred"
-    | n > 100 = 
+    | n > 100 =
         name (n `div` 100) ++ "hundredand" ++ name (n `mod` 100)
     | n == 90 = "ninety"
     | n == 80 = "eighty"

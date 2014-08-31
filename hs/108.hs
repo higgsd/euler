@@ -32,7 +32,7 @@ genSigmas (n:ns)
           fs = primeFactors n primes
           as = map length $ group fs
           x = product $ map (\a -> 2*a+1) as
-          
+
 findSolution = snd $ head $ dropWhile (\x -> fst x <= nn*2) $ genSigmas [1..]
 
 main = putStrLn $ show $ findSolution

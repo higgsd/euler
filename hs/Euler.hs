@@ -55,7 +55,7 @@ primeFactors n (p:ps)
 -- adapted from GHC 'lines'
 splitOn _ "" = []
 splitOn c s = cons (case break (== c) s of
-    (l, s') -> (l, case s' of 
+    (l, s') -> (l, case s' of
         [] -> []
         _:s'' -> splitOn c s''))
     where cons ~(h, t) = h : t
@@ -80,7 +80,7 @@ digitUsageStr s = countDigit "0123456789" $ group $ sort s
             | c == head x = length x : countDigit cs xs
             | otherwise = 0 : countDigit cs (x:xs)
 digitUsagePad n p = digitUsageStr (s ++ replicate (p - length s) '0')
-    where s = show n 
+    where s = show n
 digitUsage n = digitUsageStr $ show n
 
 solveQuadratic a b c

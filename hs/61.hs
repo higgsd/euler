@@ -5,7 +5,7 @@ bb = 10 ^ pp
 aa = 10 ^ (pp-1)
 
 polyn = [genf p | p <- take nn $ [poly3, poly4, poly5, poly6, poly7, poly8]]
-    where genf f = filter (\x -> x `mod` 100 >= 10) $ 
+    where genf f = filter (\x -> x `mod` 100 >= 10) $
                    takeWhile (bb >) $ dropWhile (aa >=) $ map f [1..]
           poly3 n = n * (n+1) `div` 2
           poly4 n = n * n

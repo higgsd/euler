@@ -15,6 +15,6 @@ makePan n d s
 genPan n = makePan n 1 ""
 
 allPans :: [Int]
-allPans = map read [ s | s <- map genPan [1..mm], isPandigital s ] 
+allPans = map read [ s | s <- map genPan [1..mm], isPandigital s ]
 
 main = putStrLn $ show $ maximum allPans
