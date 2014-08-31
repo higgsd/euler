@@ -1,6 +1,6 @@
 module Euler (
     intSqrt, primeSieve, isPrimeSimple,
-    allFactors, countFactors, primeFactors,
+    allFactors, primeFactors,
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad,
     solveQuadratic, isTriangular, isPentagonal,
@@ -32,8 +32,6 @@ buildFactors n (d:ds)
     | otherwise = f
     where f = buildFactors n ds
 allFactors n = buildFactors n [1..intSqrt n]
-
-countFactors n = length $ allFactors n
 
 primeFactors n [] = [n]
 primeFactors n (p:ps)
