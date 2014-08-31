@@ -1,7 +1,11 @@
 -- 134043
-import Euler(nfactorSieve)
+import Data.List(group, sort)
+import Euler(primeSieve)
 
 nn = 200000
+
+nfactorSieve n = map (\x -> length x - 1) $ group $ sort ps
+    where ps = concat $ [0..n] : [[x*2,x*3..n] | x <- primeSieve n]
 
 matchn n xs
     | cs == replicate n n = head ns

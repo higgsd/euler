@@ -1,6 +1,5 @@
 module Euler (
-    intSqrt, primeSieve, nfactorSieve,
-    isPrime, isPrimeSimple,
+    intSqrt, primeSieve, isPrimeSimple,
     allFactors, countFactors, primeFactors,
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad,
@@ -9,7 +8,6 @@ module Euler (
 ) where
 import Data.Char(ord)
 import Data.List(nub, sort, group, subsequences, (\\))
-import Data.Array(listArray, (//), (!))
 
 intSqrt n = floor $ sqrt $ fromIntegral n
 
@@ -19,15 +17,6 @@ buildSieve n (x:xs)
     | otherwise = (x:buildSieve n s)
     where s = [ y | y <- xs, y `mod` x /= 0 ]
 primeSieve n = buildSieve n [2..n]
-
-nfactorSieve n = map (\x -> length x - 1) $ group $ sort ps
-    where ps = concat $ [0..n] : [ [x*2,x*3..n] | x <- primeSieve n ]
-
-genPrimeArray primes = a // [(p,True) | p <- primes]
-    where a = listArray (0,last primes) $ repeat False
-isPrime primes n
-    | n > last primes = False
-    | otherwise = (genPrimeArray primes) ! n
 
 isPrimeSimple n
     | n < 2 = False
