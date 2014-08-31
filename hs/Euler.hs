@@ -1,7 +1,7 @@
 module Euler (
     intSqrt, primeSieve, nfactorSieve,
     isPrime, isPrimeSimple,
-    allFactors, countFactors,
+    allFactors, countFactors, primeFactors,
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad,
     solveQuadratic, isTriangular, isPentagonal,
@@ -45,6 +45,12 @@ buildFactors n (d:ds)
 allFactors n = buildFactors n [1..intSqrt n]
 
 countFactors n = length $ allFactors n
+
+primeFactors n [] = [n]
+primeFactors n (p:ps)
+    | p >= n = [n]
+    | n `mod` p == 0 = p : primeFactors (n `div` p) (p:ps)
+    | otherwise = primeFactors n ps
 
 -- adapted from GHC 'lines'
 splitOn _ "" = []

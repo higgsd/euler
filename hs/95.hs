@@ -1,21 +1,15 @@
 -- 14316
 import Data.Array(listArray, bounds, (!))
 import Data.List(group)
-import Euler(intSqrt, primeSieve)
+import Euler(intSqrt, primeSieve, primeFactors)
 
 nn = 1000000
+primes = primeSieve (intSqrt nn)
 
 buildNext n = listArray (2,n) [divFunction x | x <- [2..n]]
 
-primeFactors0 n [] = [n]
-primeFactors0 n (p:ps)
-    | p >= n = [n]
-    | n `mod` p == 0 = p : primeFactors0 (n `div` p) (p:ps)
-    | otherwise = primeFactors0 n ps
-primeFactors n = primeFactors0 n $ primeSieve (intSqrt nn)
-
 divFunction n = product [sum [p^ai | ai <- [0..a]] | (a,p) <- xs] - n
-    where ds = primeFactors n
+    where ds = primeFactors n primes
           xs = zip (map length $ group ds) (map head $ group ds)
 
 chainLength0 a s xs

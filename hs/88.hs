@@ -1,16 +1,9 @@
 -- 7587457
 import Data.List(delete, sort, nub, (\\), intersect)
-import Euler(primeSieve)
+import Euler(primeSieve, primeFactors)
 
 kk = 12000
 primes = primeSieve $ 2 * kk
-
-findFactors n [] = [n]
-findFactors n (p:ps)
-    | p >= n = [n]
-    | n `mod` p == 0 = p : findFactors (n `div` p) (p:ps)
-    | otherwise = findFactors n ps
-primeFactors n = findFactors n primes
 
 subPerms [] = error "subPerms: empty"
 subPerms [_] = error "subPerms: singleton"
@@ -27,7 +20,7 @@ genPerms xs = xs : genPerms0 [xs]
 genCoverage n
     | n `elem` primes = []
     | otherwise = ys
-    where xs = genPerms $ primeFactors n
+    where xs = genPerms $ primeFactors n primes
           ys = nub $ map (\x -> n - sum x + length x) xs
 
 calcSums0 [] _ s = s
