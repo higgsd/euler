@@ -4,7 +4,7 @@ GHCFLAGS = -Wall -O2 --make
 GHCFLAGS += -fno-warn-type-defaults -fno-warn-missing-signatures
 #GHCFLAGS += -prof -auto-all
 
-% %.o %.hi: %.hs Euler.hs Makefile
+% %.o %.hi: %.hs Euler.o Makefile
 	ghc $(GHCFLAGS) $<
 	@touch $@
 
@@ -18,6 +18,9 @@ GHCFLAGS += -fno-warn-type-defaults -fno-warn-missing-signatures
 
 .PHONY: all clean test
 all: $(PROGRAMS)
+Euler.o: Euler.hs
+	ghc $(GHCFLAGS) $<
+	@touch $@
 test: $(addsuffix .test,$(PROGRAMS))
 clean:
 	rm -f $(PROGRAMS) *.hi *.o *.prof
