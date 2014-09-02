@@ -4,10 +4,11 @@ module Euler (
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad,
     solveQuadratic, isPentagonal,
-    isSpecialSumSet
+    isSpecialSumSet, nChooseK
 ) where
 import Data.Char(ord)
 import Data.List(nub, sort, group, subsequences, (\\))
+import Data.Ratio((%), numerator)
 
 intSqrt n = floor $ sqrt $ fromIntegral n
 
@@ -91,3 +92,6 @@ isSpecialSumSet a
             | otherwise = sb /= sc
             where sb = sum b
                   sc = sum c
+
+nChooseK _ 0 = 1
+nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
