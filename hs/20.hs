@@ -1,5 +1,6 @@
 -- 648
+import Euler(digitSum)
 
-digitSum n = sum $ map (\c -> read [c]) $ show n
+nn = 100
 
-main = putStrLn $ show $ digitSum $ product [1..100]
+main = putStrLn $ show $ digitSum $ product [1..nn]

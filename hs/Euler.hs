@@ -2,7 +2,7 @@ module Euler (
     intSqrt, primeSieve, isPrimeSimple,
     allFactors, primeFactors,
     splitOn, loadMatrixFile, loadWordFile, wordScore,
-    digitUsage, digitUsagePad,
+    digitUsage, digitUsagePad, digitSum,
     solveQuadratic, isPentagonal,
     isSpecialSumSet, nChooseK
 ) where
@@ -70,6 +70,9 @@ digitUsageStr s = countDigit "0123456789" $ group $ sort s
 digitUsagePad n p = digitUsageStr (s ++ replicate (p - length s) '0')
     where s = show n
 digitUsage n = digitUsageStr $ show n
+
+digitSum 0 = 0
+digitSum n = n `mod` 10 + digitSum (n `div` 10)
 
 solveQuadratic a b c
     | r1 >= 0 = r1
