@@ -23,4 +23,4 @@ genMult z xs ds
 genMults = genPath xs xs (0:0:replicate (nn-1) nn)
     where xs = [1]
 
-main = putStrLn $ show $ sum genMults 
+main = putStrLn $ show $ sum genMults
