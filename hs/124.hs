@@ -1,15 +1,17 @@
 -- 21417
 import Data.Function(on)
-import Data.List(nub, sortBy)
-import Euler(primeSieve, primeFactors)
+import Data.List(sortBy)
+import Euler(radicalSieve)
 
 nn = 100000
 kk = 10000
-pp = primeSieve nn
+rr = radicalSieve nn
 
-rad n = (n, product $ nub $ primeFactors n pp)
+enumerate0 _ [] = []
+enumerate0 n (x:xs) = (n,x) : enumerate0 (n+1) xs
+enumerate xs = enumerate0 0 xs
 
-getRad k = fst $ rs !! (k-1)
-    where rs = sortBy (compare `on` snd) $ map rad [1..nn]
+getRad k = fst $ rs !! k
+    where rs = sortBy (compare `on` snd) $ enumerate rr
 
 main = putStrLn $ show $ getRad kk

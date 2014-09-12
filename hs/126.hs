@@ -1,6 +1,7 @@
 -- 18522
 import Data.List(sort, group)
 
+-- 10k too small, 100k intractible
 nn = 20000
 kk = 1000
 

@@ -1,5 +1,5 @@
 module Euler (
-    intSqrt, primeSieve, isPrimeSimple,
+    intSqrt, primeSieve, radicalSieve, isPrimeSimple,
     allFactors, primeFactors,
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad, digitSum,
@@ -18,6 +18,10 @@ buildSieve n (x:xs)
     | otherwise = (x:buildSieve n s)
     where s = [ y | y <- xs, y `mod` x /= 0 ]
 primeSieve n = buildSieve n [2..n]
+
+radicalSieve n = map calcRad [0..n]
+    where calcRad x = product $ nub $ primeFactors x pp
+          pp = primeSieve $ intSqrt n
 
 isPrimeSimple n
     | n < 2 = False
