@@ -1,10 +1,10 @@
 -- 18407904
 import Data.Function(on)
 import Data.List(sortBy)
-import Euler(enumerate, radicalSieve)
+import Euler(radicalSieve)
 
 cc = 120000
-rr = sortBy (compare `on` snd) $ drop 1 $ enumerate $ radicalSieve cc
+rr = sortBy (compare `on` snd) $ drop 1 $ radicalSieve cc
 
 genTriples = [c | (c,rc) <- rr, c > rc,
                   (a,ra) <- takeWhile (\(_,rx) -> c > rx*rc*2) rr,

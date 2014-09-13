@@ -1,6 +1,5 @@
 module Euler (
-    intSqrt, enumerate,
-    primeSieve, radicalSieve, isPrimeSimple,
+    intSqrt, primeSieve, radicalSieve, isPrimeSimple,
     allFactors, primeFactors,
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad, digitSum,
@@ -10,10 +9,6 @@ module Euler (
 import Data.Char(ord)
 import Data.List(nub, sort, group, subsequences, (\\))
 import Data.Ratio((%), numerator)
-
-enum0 _ [] = []
-enum0 n (x:xs) = (n,x) : enum0 (n+1) xs
-enumerate xs = enum0 0 xs
 
 intSqrt n = floor $ sqrt $ fromIntegral n
 
@@ -25,7 +20,7 @@ buildSieve n (x:xs)
 primeSieve n = buildSieve n [2..n]
 
 radicalSieve n = map calcRad [0..n]
-    where calcRad x = product $ nub $ primeFactors x pp
+    where calcRad x = (x, product $ nub $ primeFactors x pp)
           pp = primeSieve $ intSqrt n
 
 isPrimeSimple n
