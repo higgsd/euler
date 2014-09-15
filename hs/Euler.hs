@@ -12,12 +12,11 @@ import Data.Ratio((%), numerator)
 
 intSqrt n = floor $ sqrt $ fromIntegral n
 
-buildSieve _ [] = []
-buildSieve n (x:xs)
-    | x > (intSqrt n) = (x:xs)
-    | otherwise = (x:buildSieve n s)
-    where s = [ y | y <- xs, y `mod` x /= 0 ]
-primeSieve n = buildSieve n [2..n]
+buildSieve [] _ = []
+buildSieve (x:xs) n
+    | x > intSqrt n = (x:xs)
+    | otherwise = x : buildSieve (filter (\y -> y `mod` x /= 0) xs) n
+primeSieve n = buildSieve [2..n] n
 
 radicalSieve n = map calcRad [0..n]
     where calcRad x = (x, product $ nub $ primeFactors x pp)
