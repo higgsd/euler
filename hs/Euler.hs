@@ -13,21 +13,20 @@ import Data.Ratio((%), numerator)
 intSqrt n = floor $ sqrt $ fromIntegral n
 
 buildSieve [] _ = []
-buildSieve (x:xs) n
-    | x > intSqrt n = (x:xs)
-    | otherwise = x : buildSieve (filter (\y -> y `mod` x /= 0) xs) n
+buildSieve (p:ps) n
+    | p > intSqrt n = (p:ps)
+    | otherwise = p : buildSieve (filter (\y -> y `mod` p /= 0) ps) n
 primeSieve n = buildSieve [2..n] n
 
 radicalSieve n = map calcRad [0..n]
-    where calcRad x = (x, product $ nub $ primeFactors x pp)
+    where calcRad y = (y, product $ nub $ primeFactors y pp)
           pp = primeSieve $ intSqrt n
 
 isPrimeSimple n
     | n < 2 = False
     | n == 2 = True
     | even n = False
-    | otherwise = all checkFactor [3,5..intSqrt n]
-    where checkFactor d = n `mod` d /= 0
+    | otherwise = all (\p -> n `mod` p /= 0) [3,5..intSqrt n]
 
 buildFactors _ [] = []
 buildFactors n (d:ds)
