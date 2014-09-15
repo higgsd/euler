@@ -28,13 +28,13 @@ isPrimeSimple n
     | even n = False
     | otherwise = all (\p -> n `mod` p /= 0) [3,5..intSqrt n]
 
-buildFactors _ [] = []
-buildFactors n (d:ds)
+buildFactors [] _ = []
+buildFactors (d:ds) n
     | n == d * d = [d]
-    | n `mod` d == 0 = [d] ++ f ++ [n `div` d]
-    | otherwise = f
-    where f = buildFactors n ds
-allFactors n = buildFactors n [1..intSqrt n]
+    | n `mod` d == 0 = [d] ++ fs ++ [n `div` d]
+    | otherwise = fs
+    where fs = buildFactors ds n
+allFactors n = buildFactors [1..intSqrt n] n
 
 primeFactors n [] = [n]
 primeFactors n (p:ps)
