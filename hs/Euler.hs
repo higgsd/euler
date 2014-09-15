@@ -4,7 +4,7 @@ module Euler (
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad, digitSum,
     solveQuadratic, isPentagonal,
-    isSpecialSumSet, nChooseK
+    isSpecialSumSet, repunitAN, nChooseK
 ) where
 import Data.Char(ord)
 import Data.List(nub, sort, group, subsequences, (\\))
@@ -99,6 +99,12 @@ isSpecialSumSet a
             | otherwise = sb /= sc
             where sb = sum b
                   sc = sum c
+
+repunitAN0 r k n
+    | r2 == 0 = (k+1)
+    | otherwise = repunitAN0 r2 (k+1) n
+    where r2 = (10*r+1) `mod` n
+repunitAN n = if gcd n 10 == 1 then repunitAN0 1 1 n else 0
 
 nChooseK _ 0 = 1
 nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
