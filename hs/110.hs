@@ -10,7 +10,7 @@ genSigmas [] = []
 genSigmas (n:ns)
     | any (> maximum primes) fs = genSigmas ns
     | otherwise = (x,n) : genSigmas ns
-    where fs = primeFactors n primes
+    where fs = primeFactors primes n
           as = map length $ group fs
           x = product $ map (\a -> 2*a+1) as
 

@@ -6,7 +6,7 @@ nn = 1000000
 primes = primeSieve $ intSqrt nn
 
 phi n = n * num `div` den
-    where fs = map head $ group $ sort $ primeFactors n primes
+    where fs = map head $ group $ sort $ primeFactors primes n
           num = product $ map (\x -> x - 1) fs
           den = product fs
 

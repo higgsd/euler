@@ -20,7 +20,7 @@ genPerms xs = xs : genPerms0 [xs]
 genCoverage n
     | n `elem` primes = []
     | otherwise = ys
-    where xs = genPerms $ primeFactors n primes
+    where xs = genPerms $ primeFactors primes n
           ys = nub $ map (\x -> n - sum x + length x) xs
 
 calcSums0 [] _ s = s

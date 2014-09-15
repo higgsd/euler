@@ -9,7 +9,7 @@ primes = primeSieve (intSqrt nn)
 buildNext n = listArray (2,n) [divFunction x | x <- [2..n]]
 
 divFunction n = product [sum [p^ai | ai <- [0..a]] | (a,p) <- xs] - n
-    where ds = primeFactors n primes
+    where ds = primeFactors primes n
           xs = zip (map length $ group ds) (map head $ group ds)
 
 chainLength0 a s xs

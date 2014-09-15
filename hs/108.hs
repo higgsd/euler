@@ -29,7 +29,7 @@ genSigmas (n:ns)
     | any (> maximum primes) fs = genSigmas ns
     | otherwise = (x,n) : genSigmas ns
     where primes = [2,3,5,7,11,13,17]
-          fs = primeFactors n primes
+          fs = primeFactors primes n
           as = map length $ group fs
           x = product $ map (\a -> 2*a+1) as
 

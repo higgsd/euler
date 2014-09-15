@@ -19,7 +19,7 @@ buildSieve (p:ps) n
 primeSieve n = buildSieve [2..n] n
 
 radicalSieve n = map calcRad [0..n]
-    where calcRad y = (y, product $ nub $ primeFactors y pp)
+    where calcRad y = (y, product $ nub $ primeFactors pp y)
           pp = primeSieve $ intSqrt n
 
 isPrimeSimple n
@@ -36,21 +36,20 @@ buildFactors (d:ds) n
     where fs = buildFactors ds n
 allFactors n = buildFactors [1..intSqrt n] n
 
-primeFactors n [] = [n]
-primeFactors n (p:ps)
+primeFactors [] n = [n]
+primeFactors (p:ps) n
     | p >= n = [n]
-    | n `mod` p == 0 = p : primeFactors (n `div` p) (p:ps)
-    | otherwise = primeFactors n ps
+    | n `mod` p == 0 = p : primeFactors (p:ps) (n `div` p)
+    | otherwise = primeFactors ps n
 
 -- adapted from GHC 'lines'
 splitOn _ "" = []
 splitOn c s = cons (case break (== c) s of
-    (l, s') -> (l, case s' of
+    (l, s2) -> (l, case s2 of
         [] -> []
-        _:s'' -> splitOn c s''))
+        (_:s3) -> splitOn c s3))
     where cons ~(h, t) = h : t
 
-loadMatrixFile :: String -> IO [[Integer]]
 loadMatrixFile fname = do
     contents <- readFile fname
     return $ map (\x -> map read $ splitOn ',' x) $ lines contents
