@@ -56,11 +56,9 @@ loadMatrixFile fname = do
 
 loadWordFile fname = do
     contents <- readFile fname
-    return $ map dropQuotes $ splitOn ',' contents
-        where dropQuotes s = reverse $ drop 1 $ reverse $ drop 1 s
+    return $ map (tail.init) $ splitOn ',' contents
 
-wordScore word = sum $ map alphaOrd word
-    where alphaOrd c = ord c - ord 'A' + 1
+wordScore w = sum $ map (\c -> ord c - ord 'A' + 1) w
 
 digitUsageStr s = countDigit "0123456789" $ group $ sort s
     where countDigit [] _ = []
