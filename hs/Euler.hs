@@ -31,16 +31,18 @@ isPrimeSimple n
 buildFactors [] _ = []
 buildFactors (d:ds) n
     | n == d * d = [d]
-    | n `mod` d == 0 = [d] ++ fs ++ [n `div` d]
+    | m == 0 = [d] ++ fs ++ [r]
     | otherwise = fs
     where fs = buildFactors ds n
+          (r,m) = n `divMod` d
 allFactors n = buildFactors [1..intSqrt n] n
 
 primeFactors [] n = [n]
 primeFactors (p:ps) n
     | p >= n = [n]
-    | n `mod` p == 0 = p : primeFactors (p:ps) (n `div` p)
+    | m == 0 = p : primeFactors (p:ps) d
     | otherwise = primeFactors ps n
+    where (d,m) = n `divMod` p
 
 -- adapted from GHC 'lines'
 splitOn _ "" = []
@@ -71,7 +73,8 @@ digitUsagePad n p = digitUsageStr (s ++ replicate (p - length s) '0')
 digitUsage n = digitUsageStr $ show n
 
 digitSum 0 = 0
-digitSum n = n `mod` 10 + digitSum (n `div` 10)
+digitSum n = m + digitSum d
+    where (d,m) = n `divMod` 10
 
 solveQuadratic a b c
     | r1 >= 0 = r1
