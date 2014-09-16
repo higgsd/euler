@@ -4,7 +4,7 @@ module Euler (
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad, digitSum,
     solveQuadratic, isPentagonal,
-    isSpecialSumSet, repunitAN, nChooseK
+    isSpecialSumSet, repunitAN, nChooseK, modPow
 ) where
 import Data.Char(ord)
 import Data.List(nub, sort, group, subsequences, (\\))
@@ -106,3 +106,9 @@ repunitAN n = if gcd n 10 == 1 then repunitAN0 1 1 n else 0
 
 nChooseK _ 0 = 1
 nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
+
+-- binary method
+modPow x n d = fst $ iterate modPow0 (1, (x `mod` d, n)) !! v
+    where v = ceiling $ logBase 2 $ fromIntegral n
+          modPow0 (r,(b,e)) = (if odd e then r*b `mod` d else r,
+                               (b^2 `mod` d, e `div` 2))
