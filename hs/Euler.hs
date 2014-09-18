@@ -9,14 +9,10 @@ module Euler (
 import Data.Char(ord)
 import Data.List(nub, sort, group, subsequences, (\\))
 import Data.Ratio((%), numerator)
+import Math.Sieve.ONeill(primes)
 
 intSqrt n = floor $ sqrt $ fromIntegral n
-
-buildSieve [] _ = []
-buildSieve (p:ps) n
-    | p > intSqrt n = (p:ps)
-    | otherwise = p : buildSieve (filter (\y -> y `mod` p /= 0) ps) n
-primeSieve n = buildSieve [2..n] n
+primeSieve n = takeWhile (n>=) primes
 
 radicalSieve n = map calcRad [0..n]
     where calcRad y = (y, product $ nub $ primeFactors pp y)
