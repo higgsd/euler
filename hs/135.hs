@@ -12,10 +12,8 @@ kk = 10
 -- z = (3v - u) / 4, d = (v + u) / 4
 -- z and d both positive integers, 3v > u
 
-genSols = [n | v <- [1..nn], u <- [1..min (3*v-1) (nn `div` v)],
-               let (z,m1) = (3*v-u) `divMod` 4, m1 == 0,
-               let (d,m2) = (v+u) `divMod` 4, m2 == 0,
-               let n = 3*d^2 + 2*d*z - z^2]
+genSols = [u*v | v <- [1..nn], u <- [1..min (3*v-1) (nn `div` v)],
+                 (3*v-u) `mod` 4 == 0, (v+u) `mod` 4 == 0]
 
 countSols = accumArray (+) 0 (1,nn) $ map (\x -> (x,1)) genSols
 
