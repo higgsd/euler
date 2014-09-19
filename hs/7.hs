@@ -1,4 +1,6 @@
 -- 104743
-import Euler(primeSieve)
+import Math.Sieve.ONeill(primesToNth)
 
-main = putStrLn $ show $ (primeSieve 200000) !! (10001-1)
+nn = 10001
+
+main = putStrLn $ show $ last $ primesToNth nn

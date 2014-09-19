@@ -1,14 +1,11 @@
 -- 232792560
+nn = 20
 
-isDivisible n = all tryDiv [2..20]
-    where tryDiv x = n `mod` x == 0
+tryReduce n d = if m == 0 && isDivisible then tryReduce q d else n
+    where (q,m) = n `divMod` d
+          isDivisible = all (\x -> q `mod` x == 0) [2..nn]
 
-tryReduce n d
-    | n `mod` d == 0 && isDivisible (n `div` d) = tryReduce (n `div` d) d
-    | otherwise = n
+reduceAll = foldl tryReduce p [2..nn]
+    where p = product [2..nn]
 
-reduceAll _ [] = error "unreachable"
-reduceAll n (x:[]) = tryReduce n x
-reduceAll n (x:xs) = reduceAll (tryReduce n x) xs
-
-main = putStrLn $ show $ reduceAll (product [2..20]) [2..20]
+main = putStrLn $ show $ reduceAll

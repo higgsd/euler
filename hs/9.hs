@@ -1,10 +1,7 @@
 -- 31875000
+nn = 1000
 
-isTriple a b c
-    | a * a + b * b == c * c = True
-    | otherwise = False
+findProd n = head [a*b*c | a <- [1..n-2], b <- [a+1..n-a-1],
+                           let c = n-a-b, c > b, a*a + b*b == c*c]
 
-findTripleProd n = head [ a * b * c | (a,b,c) <- xs, isTriple a b c ]
-    where xs = [ (a,b,n-a-b) | a <- [1..n], b <- [a+1..n-a], n-a-b > b ]
-
-main = putStrLn $ show $ findTripleProd 1000
+main = putStrLn $ show $ findProd nn

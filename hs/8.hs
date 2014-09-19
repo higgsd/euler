@@ -1,10 +1,14 @@
--- 40824
+-- 23514624000
+import Data.Char(ord)
 
-bestFive (a:b:c:d:e:xs) = max n (bestFive (b:c:d:e:xs))
-    where n = read [a] * read [b] * read [c] * read [d] * read [e]
-bestFive _ = -1
+nn = 13
 
-main = putStrLn $ show $ bestFive "\
+maxSeq n xs = maximum $ map parseN [0..length xs-1]
+    where parseN x = readN $ take n $ drop x xs
+          readN ys = if length ys == n then product $ map readDigit ys else 0
+          readDigit c = ord c - ord '0'
+
+main = putStrLn $ show $ maxSeq nn "\
 \73167176531330624919225119674426574742355349194934\
 \96983520312774506326239578318016984801869478851843\
 \85861560789112949495459501737958331952853208805511\

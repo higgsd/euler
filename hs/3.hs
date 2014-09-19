@@ -1,7 +1,8 @@
 -- 6857
 import Euler(intSqrt, primeSieve)
 
-largestFactor n = head [ x | x <- primes, n `mod` x == 0 ]
-    where primes = reverse $ primeSieve $ intSqrt n
+nn = 600851475143
 
-main = putStrLn $ show $ largestFactor 600851475143
+main = putStrLn $ show $ largestFactor nn
+    where largestFactor n = head $ filter (\p -> n `mod` p == 0) $
+                            reverse $ primeSieve $ intSqrt n

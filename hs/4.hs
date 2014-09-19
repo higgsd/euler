@@ -1,8 +1,9 @@
 -- 906609
+kk = 3
 
-isPalindrome n = show n == (reverse $ show n)
+largestPalin k = maximum [x*y | x <- [a..b], y <- [x..b], isPalindrome (x*y)]
+    where isPalindrome n = show n == (reverse $ show n)
+          a = 10^(k-1)
+          b = 10^k-1
 
-largest = maximum [ x * y | x <- [100..999],
-                            y <- [x+1..999], isPalindrome $ x * y ]
-
-main = putStrLn $ show $ largest
+main = putStrLn $ show $ largestPalin kk

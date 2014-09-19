@@ -1,8 +1,5 @@
 -- 25164150
+nn = 100
 
-sumSquare xs = sum [ x * x | x <- xs ]
-
-squareSum xs = x * x
-    where x = sum xs
-
-main = putStrLn $ show $ squareSum [1..100] - sumSquare [1..100]
+main = putStrLn $ show $ diffSums [1..nn]
+    where diffSums xs = (sum xs)^2 - sum (map (^2) xs)
