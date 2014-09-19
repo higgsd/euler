@@ -1,15 +1,15 @@
 -- 1074
 import Euler(readMatrix)
 
-sumTri [[x]] = x
-sumTri (x:y:ys) = sumTri (yy:ys)
-    where max2 (a,b) = max a b
-          add2 (a,b) = a + b
-          xx = map max2 $ zip x $ tail x
-          yy = map add2 $ zip xx y
-sumTri _ = error "unreachable"
+-- accumulate best path from the bottom-up
+sumTri0 [[x]] = x
+sumTri0 (x:y:ys) = sumTri0 (yy:ys)
+    where xx = map (\(a,b) -> max a b) $ zip x (tail x)
+          yy = map (\(a,b) -> a+b) $ zip xx y
+sumTri0 _ = error "sumTri0: empty"
+bestTriPath t = sumTri0 $ reverse t
 
-main = putStrLn $ show $ sumTri $ reverse $ readMatrix tt
+main = putStrLn $ show $ bestTriPath $ readMatrix tt
 
 tt = "\
 \75\n\

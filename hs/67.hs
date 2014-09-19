@@ -1,13 +1,14 @@
 -- 7273
+import Euler(readMatrix)
 
-readTri s = reverse $ map (\x -> map read $ words x) $ lines s
-
-sumTri [[x]] = x
-sumTri (x:y:ys) = sumTri (yy:ys)
-    where xx = map (\(a,b) -> max a b) $ zip x $ tail x
-          yy = map (\(a,b) -> a + b) $ zip xx y
-sumTri _ = error "unreachable"
+-- accumulate best path from the bottom-up
+sumTri0 [[x]] = x
+sumTri0 (x:y:ys) = sumTri0 (yy:ys)
+    where xx = map (\(a,b) -> max a b) $ zip x (tail x)
+          yy = map (\(a,b) -> a+b) $ zip xx y
+sumTri0 _ = error "sumTri0: empty"
+bestTriPath t = sumTri0 $ reverse t
 
 main = do
-    tri <- readFile "../files/triangle.txt"
-    putStrLn $ show $ sumTri $ readTri tri
+    contents <- readFile "../files/triangle.txt"
+    putStrLn $ show $ bestTriPath $ readMatrix contents

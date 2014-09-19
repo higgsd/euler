@@ -37,7 +37,7 @@ nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
 -- parsing
 readMatrix s = case AP.parseOnly (matrixParser <* AP.endOfInput) (pack s) of
                 Left e -> error $ "readMatrix: " ++ e
-                Right xs -> xs
+                Right xs -> filter (not.null) xs
     where matrixParser = lineParser `AP.sepBy` AP.endOfLine
           lineParser = intParser `AP.sepBy` (AP.char ' ')
           intParser :: AP.Parser Int

@@ -1,4 +1,6 @@
 -- 171
+mm = 1901
+nn = 2001
 
 daysInMonth y m
     | m == 4 || m == 6 || m == 9 || m == 11 = 30
@@ -17,7 +19,6 @@ firstDaysInYears y1 y2 = take m2 $ drop m1 $ firstDaysOfMonths 1900 1 1
     where m1 = (y1 - 1900) * 12
           m2 = (y2 - y1) * 12
 
-countSundays y1 y2 = length $ filter isSunday $ firstDaysInYears y1 y2
-    where isSunday d = d == 0
+countSundays y1 y2 = length $ filter (==0) $ firstDaysInYears y1 y2
 
-main = putStrLn $ show $ countSundays 1901 2001
+main = putStrLn $ show $ countSundays mm nn
