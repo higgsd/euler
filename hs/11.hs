@@ -1,9 +1,20 @@
 -- 70600674
+import qualified Data.Attoparsec.ByteString.Char8 as AP
+import Data.ByteString.Char8(pack)
+
 mm = 4
 nn = 20
 
-makeGrid s = map readWords (lines s)
-    where readWords ss = map read (words ss)
+numParser :: AP.Parser Int
+numParser = do
+    s <- AP.count 2 AP.digit
+    return $ read s
+
+makeGrid s = case AP.parseOnly gridParser $ pack s of
+                Left err -> error $ "makeGrid: " ++ err
+                Right xs -> xs
+    where gridParser = lineParser `AP.sepBy` AP.endOfLine
+          lineParser = numParser `AP.sepBy` (AP.char ' ')
 
 buildXY _ [] = []
 buildXY (x,y) ((a,b):zs) = (x+a,y+b):buildXY (x,y) zs
@@ -12,12 +23,12 @@ genAcross = [buildXY (x,y) across | x <- [0..nn-mm], y <- [0..nn-1]]
     where across = take mm $ zip [0..] $ repeat 0
 genDown = [buildXY (x,y) down | x <- [0..nn-1], y <- [0..nn-mm]]
     where down = take mm $ zip (repeat 0) [0..]
-genDiag1 = [buildXY (x,y) diag | x <- [0..nn-mm], y <- [0..nn-mm]]
+genDiagR = [buildXY (x,y) diag | x <- [0..nn-mm], y <- [0..nn-mm]]
     where diag = take mm $ zip [0..] [0..]
-genDiag2 = [buildXY (x,y) diag | x <- [0..nn-mm], y <- [0..nn-mm]]
+genDiagL = [buildXY (x,y) diag | x <- [0..nn-mm], y <- [0..nn-mm]]
     where diag = take mm $ zip [mm-1,mm-2..] [0..]
 
-genAll = concat [genAcross, genDown, genDiag1, genDiag2]
+genAll = concat [genAcross, genDown, genDiagR, genDiagL]
 
 bestProd g = maximum $ map prodXY genAll
     where prodXY ys = product $ map getXY ys

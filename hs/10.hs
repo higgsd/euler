@@ -1,4 +1,6 @@
 -- 142913828922
 import Euler(primeSieve)
 
-main = putStrLn $ show $ sum $ primeSieve 2000000
+nn = 2000000
+
+main = putStrLn $ show $ sum $ primeSieve nn
