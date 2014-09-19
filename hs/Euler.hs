@@ -1,18 +1,28 @@
 module Euler (
-    intSqrt, primeSieve, radicalSieve, isPrimeSimple,
-    allFactors, primeFactors,
+    intSqrt, primeSieve, primeFactors, allDivisors,
+    radicalSieve, isPrimeSimple,
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad, digitSum,
     solveQuadratic, isPentagonal,
     isSpecialSumSet, repunitAN, nChooseK, modPow
 ) where
 import Data.Char(ord)
-import Data.List(nub, sort, group, subsequences, (\\))
+import Data.List((\\), group, nub, sort, subsequences)
 import Data.Ratio((%), numerator)
 import Math.Sieve.ONeill(primes)
 
 intSqrt n = floor $ sqrt $ fromIntegral n
 primeSieve n = takeWhile (n>=) primes
+
+primeFactors [] n = [n]
+primeFactors (p:ps) n
+    | p >= n = [n]
+    | m == 0 = p : primeFactors (p:ps) d
+    | otherwise = primeFactors ps n
+    where (d,m) = n `divMod` p
+
+allDivisorsP ps n = sort $ nub $ map product $ subsequences $ primeFactors ps n
+allDivisors n = allDivisorsP (primeSieve $ intSqrt n) n
 
 radicalSieve n = map calcRad [0..n]
     where calcRad y = (y, product $ nub $ primeFactors pp y)
@@ -23,22 +33,6 @@ isPrimeSimple n
     | n == 2 = True
     | even n = False
     | otherwise = all (\p -> n `mod` p /= 0) [3,5..intSqrt n]
-
-buildFactors [] _ = []
-buildFactors (d:ds) n
-    | n == d * d = [d]
-    | m == 0 = [d] ++ fs ++ [r]
-    | otherwise = fs
-    where fs = buildFactors ds n
-          (r,m) = n `divMod` d
-allFactors n = buildFactors [1..intSqrt n] n
-
-primeFactors [] n = [n]
-primeFactors (p:ps) n
-    | p >= n = [n]
-    | m == 0 = p : primeFactors (p:ps) d
-    | otherwise = primeFactors ps n
-    where (d,m) = n `divMod` p
 
 -- adapted from GHC 'lines'
 splitOn _ "" = []

@@ -1,10 +1,10 @@
 -- 4179871
 import Data.Array(listArray, (!))
-import Euler(allFactors)
+import Euler(allDivisors)
 
 n = 28123
 
-isAbundant x = (sum $ allFactors x) - x > x
+isAbundant x = (sum $ init $ allDivisors x) > x
 abundantArray = listArray (1,n) $ map isAbundant [1..n]
 abundants = filter (abundantArray !) [1..n]
 

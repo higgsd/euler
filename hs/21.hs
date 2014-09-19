@@ -1,7 +1,7 @@
 -- 31626
-import Euler(allFactors)
+import Euler(allDivisors)
 
-factorSum n = sum $ drop 1 $ reverse $ allFactors n
+factorSum n = sum $ init $ allDivisors n
 isAmicable a = a /= b && a == db
     where b = factorSum a
           db = factorSum b

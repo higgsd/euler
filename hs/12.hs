@@ -1,8 +1,8 @@
 -- 76576500
-import Euler(allFactors)
+import Euler(allDivisors)
 
-findTri (t,i)
-    | length (allFactors t) > 500 = t
-    | otherwise = findTri (t+i,i+1)
+nn = 500
 
-main = putStrLn $ show $ findTri (0,1)
+findTri n t i = if length (allDivisors t) > n then t else findTri n (t+i) (i+1)
+
+main = putStrLn $ show $ findTri nn 0 1
