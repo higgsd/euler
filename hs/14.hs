@@ -1,25 +1,23 @@
 -- 837799
-import qualified Data.Map as Map
+import Data.Function(on)
+import Data.List(maximumBy)
+import qualified Data.Map.Strict as M
 
-nextItem n
-    | even n = n `div` 2
-    | otherwise = n * 3 + 1
+nn = 1000000
 
-updateChain lut _ [] = lut
-updateChain lut depth (c:cs) = updateChain nlut (depth+1) cs
-    where nlut = Map.insert c depth lut
+insertChain m _ [] = m
+insertChain m d (x:xs) = insertChain (M.insert x d m) (d+1) xs
 
-findChain lut [] = lut
-findChain lut xs = case Map.lookup n lut of
-    Nothing -> findChain lut (n:xs)
-    Just depth -> updateChain lut (depth+1) xs
-    where n = nextItem $ head xs
+searchChain _ [] = error "searchChain: empty"
+searchChain m xall@(x:_) = case M.lookup nx m of
+    Nothing -> searchChain m (nx:xall)
+    Just d -> insertChain m (d+1) xall
+    where nx = if even x then x `div` 2 else x*3+1
 
-buildChains lut [] = lut
-buildChains lut (x:xs) = buildChains (findChain lut [x]) xs
+buildChains m [] = m
+buildChains m (x:xs) = buildChains (searchChain m [x]) xs
 
-longestChain = snd $ Map.findMax lut2
-    where lut1 = buildChains (Map.fromList [(1,1)]) [2..1000000]
-          lut2 = Map.fromList $ zip (Map.elems lut1) (Map.keys lut1)
+longestChain n = fst $ maximumBy (compare `on` snd) $ M.assocs m
+    where m = buildChains (M.fromList [(1,0)]) [2..n]
 
-main = putStrLn $ show $ longestChain
+main = putStrLn $ show $ longestChain nn

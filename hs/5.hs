@@ -1,11 +1,12 @@
 -- 232792560
 nn = 20
 
-tryReduce n d = if m == 0 && isDivisible then tryReduce q d else n
+tryReduce ds n d = if m == 0 && isDivisible then tryReduce ds q d else n
     where (q,m) = n `divMod` d
-          isDivisible = all (\x -> q `mod` x == 0) [2..nn]
+          isDivisible = all (\x -> q `mod` x == 0) ds
 
-reduceAll = foldl tryReduce p [2..nn]
-    where p = product [2..nn]
+smallestMult n = foldl (tryReduce ds) p ds
+    where p = product ds
+          ds = [2..n]
 
-main = putStrLn $ show $ reduceAll
+main = putStrLn $ show $ smallestMult nn

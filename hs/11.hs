@@ -1,18 +1,7 @@
 -- 70600674
-import qualified Data.Attoparsec.ByteString.Char8 as AP
-import Data.ByteString.Char8(pack)
+import Euler(readMatrix)
 
 kk = 4
-
-numParser = do
-    s <- AP.count 2 AP.digit
-    return $ read s
-
-makeGrid s = case AP.parseOnly gridParser $ pack s of
-                Left err -> error $ "makeGrid: " ++ err
-                Right xs -> xs
-    where gridParser = lineParser `AP.sepBy` AP.endOfLine
-          lineParser = numParser `AP.sepBy` (AP.char ' ')
 
 genLines g n = [take n $ f x y | x <- [0..mx-1], y <- [0..my-1],
                                  f <- [across, down, diagR, diagL]]
@@ -31,8 +20,9 @@ gridProd g xs
           (x1,y1) = head xs
           (x2,y2) = last xs
 
-main = putStrLn $ show $ maximum $ map (gridProd g) $ genLines g kk
-    where g = makeGrid gg
+bestGridProd g k = maximum $ map (gridProd g) $ genLines g k
+
+main = putStrLn $ show $ bestGridProd (readMatrix gg) kk
 
 gg = "\
 \08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08\n\

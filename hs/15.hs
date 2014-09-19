@@ -1,6 +1,9 @@
 -- 137846528820
+import Euler(nChooseK)
 
-countPaths n = product [1..n*2] `div` p `div` p
-    where p = product [1..n]
+nn = 20
 
-main = putStrLn $ show $ countPaths 20
+-- two choices at each node, 2n nodes to traverse
+latticePaths n = nChooseK (n*2) n
+
+main = putStrLn $ show $ latticePaths nn

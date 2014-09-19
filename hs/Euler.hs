@@ -1,17 +1,23 @@
 module Euler (
-    intSqrt, primeSieve, primeFactors, allDivisors,
+    intSqrt, primeSieve, primeFactors, allDivisors, nChooseK, readMatrix,
     radicalSieve, isPrimeSimple,
     splitOn, loadMatrixFile, loadWordFile, wordScore,
     digitUsage, digitUsagePad, digitSum,
     solveQuadratic, isPentagonal,
-    isSpecialSumSet, repunitAN, nChooseK, modPow
+    isSpecialSumSet, repunitAN, modPow
 ) where
+import Control.Applicative((<*))
+import qualified Data.Attoparsec.ByteString.Char8 as AP
+import Data.ByteString.Char8(pack)
 import Data.Char(ord)
 import Data.List((\\), group, nub, sort, subsequences)
 import Data.Ratio((%), numerator)
 import Math.Sieve.ONeill(primes)
 
+-- misc
 intSqrt n = floor $ sqrt $ fromIntegral n
+
+-- primes, factoring, etc.
 primeSieve n = takeWhile (n>=) primes
 
 primeFactors [] n = [n]
@@ -24,6 +30,22 @@ primeFactors (p:ps) n
 allDivisorsP ps n = sort $ nub $ map product $ subsequences $ primeFactors ps n
 allDivisors n = allDivisorsP (primeSieve $ intSqrt n) n
 
+-- combinatorics
+nChooseK _ 0 = 1
+nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
+
+-- parsing
+readMatrix s = case AP.parseOnly (matrixParser <* AP.endOfInput) (pack s) of
+                Left e -> error $ "readMatrix: " ++ e
+                Right xs -> xs
+    where matrixParser = lineParser `AP.sepBy` AP.endOfLine
+          lineParser = intParser `AP.sepBy` (AP.char ' ')
+          intParser :: AP.Parser Int
+          intParser = do
+              v <- AP.count 2 AP.digit
+              return $ read v
+
+-- XXX unsorted
 radicalSieve n = map calcRad [0..n]
     where calcRad y = (y, product $ nub $ primeFactors pp y)
           pp = primeSieve $ intSqrt n
@@ -93,9 +115,6 @@ repunitAN0 r k n
     | otherwise = repunitAN0 r2 (k+1) n
     where r2 = (10*r+1) `mod` n
 repunitAN n = if gcd n 10 == 1 then repunitAN0 1 1 n else 0
-
-nChooseK _ 0 = 1
-nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
 
 -- binary method
 modPow x n d = fst $ iterate modPow0 (1, (x `mod` d, n)) !! v

@@ -1,6 +1,8 @@
 -- 1366
+import Data.Char(ord)
 
-powerSum n = sum $ map readDigit $ show $ floor $ 2 ** n
-    where readDigit c = read [c]
+nn = 1000
 
-main = putStrLn $ show $ powerSum 1000
+powerDigitSum n = sum $ map (\c -> ord c - ord '0') $ show $ 2^n
+
+main = putStrLn $ show $ powerDigitSum nn

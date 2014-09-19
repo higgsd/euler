@@ -4,4 +4,6 @@ nn = 4000000
 genFib a b = c : genFib b c
     where c = a+b
 
-main = putStrLn $ show $ sum $ takeWhile (nn>) $ filter even $ genFib 1 2
+sumFibs n = sum $ takeWhile (n>) $ filter even $ genFib 1 2
+
+main = putStrLn $ show $ sumFibs nn

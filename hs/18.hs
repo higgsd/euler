@@ -1,6 +1,5 @@
 -- 1074
-
-readTri s = reverse $ map (\x -> map read $ words x) $ lines s
+import Euler(readMatrix)
 
 sumTri [[x]] = x
 sumTri (x:y:ys) = sumTri (yy:ys)
@@ -10,7 +9,9 @@ sumTri (x:y:ys) = sumTri (yy:ys)
           yy = map add2 $ zip xx y
 sumTri _ = error "unreachable"
 
-main = putStrLn $ show $ sumTri $ readTri "\
+main = putStrLn $ show $ sumTri $ reverse $ readMatrix tt
+
+tt = "\
 \75\n\
 \95 64\n\
 \17 47 82\n\

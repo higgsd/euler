@@ -3,4 +3,6 @@ import Euler(primeSieve)
 
 nn = 2000000
 
-main = putStrLn $ show $ sum $ primeSieve nn
+primeSum n = sum $ primeSieve n
+
+main = putStrLn $ show $ primeSum nn
