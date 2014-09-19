@@ -1,16 +1,18 @@
 -- -59231
 import Data.List(sort)
+import Data.Array((!), (//), listArray)
 import Euler(primeSieve)
 
 nn = 1000
-mm = 80
-vv = mm * mm + mm * nn + nn
-primeList = [ n `elem` primes | n <- [0..vv] ]
-    where primes = primeSieve vv
 
-primeSeqLength a b = length $ takeWhile id candidates
-    where candidates = [ c >= 2 && primeList !! c | n <- [0..], let c = n*n + a*n + b ]
+primeSeqLen a b n = length $ takeWhile isPrime $ map poly [0..]
+    where poly x = x*x + a*x + b
+          isPrime x = x > 2 && primeArray ! x
+          primeArray = emptyArray // [(p,True) | p <- primeSieve n]
+          emptyArray = listArray (1,n) $ repeat False
 
-allLengths = [ (primeSeqLength a b, a*b) | a <- [1-nn,2-nn..nn-1], b <- [2..nn-1] ]
+findBestPoly n = snd $ last $ sort $ [(primeSeqLen a b v, a*b) |
+                                      a <- [1-n,2-n..n-1], b <- [2..n-1]]
+    where v = 2*n^2 + n
 
-main = putStrLn $ show $ snd $ head $ reverse $ sort $ allLengths
+main = putStrLn $ show $ findBestPoly nn

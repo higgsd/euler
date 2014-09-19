@@ -1,13 +1,16 @@
 -- 983
 import Data.List(sort)
 
-countRepeating n r depth xs
-    | rem2 `elem` xs = depth
-    | otherwise = countRepeating n rem2 (depth + 1) (rem2:xs)
-    where rem2 = r * 10 `mod` n
+nn = 1000
 
-digitsRepeating = map (\n -> countRepeating n 1 1 [0, 1])
+-- cannot just check r1 == 1, for cases like 1/6
+repCycle r d xs n
+    | r2 == 0 = 0
+    | r2 `elem` xs = d
+    | otherwise = repCycle r2 (d+1) (r2:xs) n
+    where r2 = r * 10 `mod` n
 
-mostDigitsRepeating xs = snd $ head $ reverse $ sort $ zip (digitsRepeating xs) xs
+longestRepCycle n = snd $ last $ sort $ genRepCycle
+    where genRepCycle = map (\x -> (repCycle 1 1 [1] x, x)) [2..n]
 
-main = putStrLn $ show $ mostDigitsRepeating [2..1000]
+main = putStrLn $ show $ longestRepCycle nn

@@ -1,12 +1,10 @@
 -- 4782
+import Euler(fibonacci)
 
-pairFib n (a,b)
-    | n == 1 = a
-    | n == 2 = b
-    | otherwise = pairFib (n-1) (b, a+b)
-fibNum n = pairFib n (1,1)
+nn = 1000
 
-getFib n = head [ x | x <- [1..], numLen x >= n ]
-    where numLen x = length $ show $ fibNum x
+-- cannot use logBase 10, exceeds floating point range
+findFibDigits n = snd $ head $ filter (\x -> n == fst x) $ zip fibDigits [1..]
+    where fibDigits = map (length.show) fibonacci
 
-main = putStrLn $ show $ getFib 1000
+main = putStrLn $ show $ findFibDigits nn

@@ -1,9 +1,8 @@
 -- 4613732
+import Euler(fibonacci)
+
 nn = 4000000
 
-genFib a b = c : genFib b c
-    where c = a+b
-
-sumFibs n = sum $ takeWhile (n>) $ filter even $ genFib 1 2
+sumFibs n = sum $ takeWhile (n>) $ filter even $ fibonacci
 
 main = putStrLn $ show $ sumFibs nn

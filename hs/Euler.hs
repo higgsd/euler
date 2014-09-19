@@ -1,6 +1,6 @@
 module Euler (
-    intSqrt, wordScore, primeSieve, primeFactors, allDivisors, nChooseK,
-    readMatrix, readWords,
+    fibonacci, intSqrt, wordScore, primeSieve, primeFactors, allDivisors,
+    allDivisorsP, nChooseK, readMatrix, readWords,
     radicalSieve, isPrimeSimple,
     splitOn, loadMatrixFile,
     digitUsage, digitUsagePad, digitSum,
@@ -16,6 +16,8 @@ import Data.Ratio((%), numerator)
 import Math.Sieve.ONeill(primes)
 
 -- misc
+fibonacci = 1:genFib 0 1
+    where genFib a b = (a+b) : genFib b (a+b) 
 intSqrt n = floor $ sqrt $ fromIntegral n
 wordScore w = sum $ map (\c -> ord c - ord 'A' + 1) w
 

@@ -1,6 +1,8 @@
 -- 669171001
+nn = 1001
 
-sumDiags 1 = 1
-sumDiags n = 4 * n * n - 6 * n + 6
+sumDiags n = sum $ map sumLayer [1,3..n]
+    where sumLayer 1 = 1
+          sumLayer x = 4*x*x - 6*x + 6
 
-main = putStrLn $ show $ sum $ map sumDiags [1,3..1002]
+main = putStrLn $ show $ sumDiags nn

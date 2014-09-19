@@ -1,7 +1,12 @@
 -- 2783915460
--- different than C/python
+import Data.List(delete)
 
-lexperms a [] = [a]
-lexperms a bs = foldr (++) [] [ lexperms (a ++ [b]) (filter (/= b) bs) | b <- bs ]
+nn = 1000000
 
-main = putStrLn $ head $ drop 999999 $ lexperms "" "0123456789"
+-- recursive, lexographic sort
+-- append suffixes in increasing order
+lexPerms0 a [] = [a]
+lexPerms0 a bs = concat [lexPerms0 (a ++ [b]) (delete b bs) | b <- bs]
+lexPerms xs = lexPerms0 [] xs
+
+main = putStrLn $ lexPerms "0123456789" !! (nn-1)

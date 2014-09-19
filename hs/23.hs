@@ -1,15 +1,16 @@
 -- 4179871
-import Data.Array(listArray, (!))
-import Euler(allDivisors)
+import Data.Array(array, (!))
+import Euler(intSqrt, primeSieve, allDivisorsP)
 
-n = 28123
+nn = 28123
 
-isAbundant x = (sum $ init $ allDivisors x) > x
-abundantArray = listArray (1,n) $ map isAbundant [1..n]
-abundants = filter (abundantArray !) [1..n]
+-- generate array of abundant numbers
+-- to check, see if subtracting any abundant produces another abundant
+sumNonSums n = sum $ filter (not.isAbSum) [1..n]
+    where ar = array (1,n) $ map (\x -> (x, isAb x)) [1..n]
+          isAb x = (sum $ init $ allDivisorsP ps x) > x
+          subAb x = map (x-) $ takeWhile (<= x `div` 2) $ filter (ar!) [1..n]
+          isAbSum x = any (ar!) $ subAb x
+          ps = primeSieve $ intSqrt n
 
--- map/reduce logic is faster than iteration/recursion
-subAbundant x = map (x -) $ takeWhile (<= x `div` 2) abundants
-isAbundantSum x = any (abundantArray !) $ subAbundant x
-
-main = putStrLn $ show $ sum $ filter (not . isAbundantSum) [1..n]
+main = putStrLn $ show $ sumNonSums nn
