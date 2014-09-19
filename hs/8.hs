@@ -8,7 +8,9 @@ maxSeq n xs = maximum $ map parseN [0..length xs-1]
           readN ys = if length ys == n then product $ map readDigit ys else 0
           readDigit c = ord c - ord '0'
 
-main = putStrLn $ show $ maxSeq nn "\
+main = putStrLn $ show $ maxSeq nn ss
+
+ss = "\
 \73167176531330624919225119674426574742355349194934\
 \96983520312774506326239578318016984801869478851843\
 \85861560789112949495459501737958331952853208805511\

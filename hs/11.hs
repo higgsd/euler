@@ -2,10 +2,8 @@
 import qualified Data.Attoparsec.ByteString.Char8 as AP
 import Data.ByteString.Char8(pack)
 
-mm = 4
-nn = 20
+kk = 4
 
-numParser :: AP.Parser Int
 numParser = do
     s <- AP.count 2 AP.digit
     return $ read s
@@ -16,25 +14,27 @@ makeGrid s = case AP.parseOnly gridParser $ pack s of
     where gridParser = lineParser `AP.sepBy` AP.endOfLine
           lineParser = numParser `AP.sepBy` (AP.char ' ')
 
-buildXY _ [] = []
-buildXY (x,y) ((a,b):zs) = (x+a,y+b):buildXY (x,y) zs
+genLines g n = [take n $ f x y | x <- [0..mx-1], y <- [0..my-1],
+                                 f <- [across, down, diagR, diagL]]
+    where my = length g
+          mx = length $ head g
+          across x y = zip [x..] (repeat y)
+          down x y = zip (repeat x) [y..]
+          diagR x y = zip [x..] [y..]
+          diagL x y = zip [x..] [y,y-1..]
 
-genAcross = [buildXY (x,y) across | x <- [0..nn-mm], y <- [0..nn-1]]
-    where across = take mm $ zip [0..] $ repeat 0
-genDown = [buildXY (x,y) down | x <- [0..nn-1], y <- [0..nn-mm]]
-    where down = take mm $ zip (repeat 0) [0..]
-genDiagR = [buildXY (x,y) diag | x <- [0..nn-mm], y <- [0..nn-mm]]
-    where diag = take mm $ zip [0..] [0..]
-genDiagL = [buildXY (x,y) diag | x <- [0..nn-mm], y <- [0..nn-mm]]
-    where diag = take mm $ zip [mm-1,mm-2..] [0..]
+gridProd g xs 
+    | minimum [x1,x2,y1,y2] < 0 || max x1 x2 >= mx || max y1 y2 >= my = 1
+    | otherwise = product $ map (\(x,y) -> g !! y !! x) xs
+    where my = length g
+          mx = length $ head g
+          (x1,y1) = head xs
+          (x2,y2) = last xs
 
-genAll = concat [genAcross, genDown, genDiagR, genDiagL]
+main = putStrLn $ show $ maximum $ map (gridProd g) $ genLines g kk
+    where g = makeGrid gg
 
-bestProd g = maximum $ map prodXY genAll
-    where prodXY ys = product $ map getXY ys
-          getXY (x,y) = g !! y !! x
-
-main = putStrLn $ show $ bestProd $ makeGrid "\
+gg = "\
 \08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08\n\
 \49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00\n\
 \81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65\n\
