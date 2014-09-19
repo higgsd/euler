@@ -1,10 +1,9 @@
 -- 871198282
 import Data.List(sort)
-import Euler(loadWordFile, wordScore)
+import Euler(readWords, wordScore)
 
-nameScore n name = n * wordScore name
-allNameScores names = sum [ nameScore n $ names !! (n-1) | n <- [1..length names] ]
+sumScores ws = sum $ map (\(n,w) -> n * wordScore w) $ zip [1..] (sort ws)
 
 main = do
-    names <- loadWordFile "../files/names.txt"
-    putStrLn $ show $ allNameScores $ sort names
+    s <- readFile "../files/names.txt"
+    putStrLn $ show $ sumScores $ readWords s

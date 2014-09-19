@@ -3,4 +3,6 @@ import Euler(digitSum)
 
 nn = 100
 
-main = putStrLn $ show $ digitSum $ product [1..nn]
+factDigitSum n = digitSum $ product [2..n]
+
+main = putStrLn $ show $ factDigitSum nn

@@ -1,10 +1,11 @@
 -- 31626
 import Euler(allDivisors)
 
-factorSum n = sum $ init $ allDivisors n
-isAmicable a = a /= b && a == db
-    where b = factorSum a
-          db = factorSum b
-sumAmicable n = sum $ [ x | x <- [2..n], isAmicable x ]
+nn = 10000
 
-main = putStrLn $ show $ sumAmicable 10000
+isAmicable a = a /= b && a == factorSum b
+    where factorSum n = sum $ init $ allDivisors n
+          b = factorSum a
+sumAmicable n = sum $ filter isAmicable [2..n]
+
+main = putStrLn $ show $ sumAmicable nn

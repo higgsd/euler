@@ -10,5 +10,5 @@ sumTri0 _ = error "sumTri0: empty"
 bestTriPath t = sumTri0 $ reverse t
 
 main = do
-    contents <- readFile "../files/triangle.txt"
-    putStrLn $ show $ bestTriPath $ readMatrix contents
+    s <- readFile "../files/triangle.txt"
+    putStrLn $ show $ bestTriPath $ readMatrix s

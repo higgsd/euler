@@ -1,7 +1,8 @@
 INPUT = $(wildcard [0-9]*.hs)
 PROGRAMS = $(basename $(INPUT))
 GHCFLAGS = -Wall -O2 --make
-GHCFLAGS += -fno-warn-type-defaults -fno-warn-missing-signatures
+GHCFLAGS += -fno-warn-type-defaults -fno-warn-missing-signatures \
+            -fno-warn-unused-do-bind
 #GHCFLAGS += -prof -auto-all
 
 % %.o %.hi: %.hs Euler.o Makefile

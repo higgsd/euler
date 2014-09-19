@@ -1,7 +1,7 @@
 -- 18769
 import Data.Function(on)
 import Data.List(nub, subsequences, sort, sortBy, groupBy)
-import Euler(loadWordFile)
+import Euler(readWords)
 
 findAnagrams ws = map (map snd) $ filter (\x -> length x > 1) $
                   groupBy ((==) `on` fst) $
@@ -38,5 +38,5 @@ bestValidSquare ws = maximum $ map read xs
     where xs = concatMap validSquares $ findAnaPairs ws
 
 main = do
-    ws <- loadWordFile "../files/p098_words.txt"
-    putStrLn $ show $ bestValidSquare ws
+    s <- readFile "../files/p098_words.txt"
+    putStrLn $ show $ bestValidSquare $ readWords s

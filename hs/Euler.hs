@@ -1,12 +1,13 @@
 module Euler (
-    intSqrt, primeSieve, primeFactors, allDivisors, nChooseK, readMatrix,
+    intSqrt, wordScore, primeSieve, primeFactors, allDivisors, nChooseK,
+    readMatrix, readWords,
     radicalSieve, isPrimeSimple,
-    splitOn, loadMatrixFile, loadWordFile, wordScore,
+    splitOn, loadMatrixFile,
     digitUsage, digitUsagePad, digitSum,
     solveQuadratic, isPentagonal,
     isSpecialSumSet, repunitAN, modPow
 ) where
-import Control.Applicative((<*))
+import Control.Applicative((<*), many)
 import qualified Data.Attoparsec.ByteString.Char8 as AP
 import Data.ByteString.Char8(pack)
 import Data.Char(ord)
@@ -16,6 +17,7 @@ import Math.Sieve.ONeill(primes)
 
 -- misc
 intSqrt n = floor $ sqrt $ fromIntegral n
+wordScore w = sum $ map (\c -> ord c - ord 'A' + 1) w
 
 -- primes, factoring, etc.
 primeSieve n = takeWhile (n>=) primes
@@ -45,6 +47,16 @@ readMatrix s = case AP.parseOnly (matrixParser <* AP.endOfInput) (pack s) of
               v <- AP.count 2 AP.digit
               return $ read v
 
+readWords s = case AP.parseOnly (lineParser <* AP.endOfInput) (pack s) of
+                Left e -> error $ "readWords: " ++ e
+                Right xs -> xs
+    where lineParser = wordParser `AP.sepBy` (AP.char ',')
+          wordParser = do
+                AP.char '"'
+                v <- many $ AP.notChar '"'
+                AP.char '"'
+                return v
+
 -- XXX unsorted
 radicalSieve n = map calcRad [0..n]
     where calcRad y = (y, product $ nub $ primeFactors pp y)
@@ -67,12 +79,6 @@ splitOn c s = cons (case break (== c) s of
 loadMatrixFile fname = do
     contents <- readFile fname
     return $ map (\x -> map read $ splitOn ',' x) $ lines contents
-
-loadWordFile fname = do
-    contents <- readFile fname
-    return $ map (tail.init) $ splitOn ',' contents
-
-wordScore w = sum $ map (\c -> ord c - ord 'A' + 1) w
 
 digitUsageStr s = countDigit "0123456789" $ group $ sort s
     where countDigit [] _ = []

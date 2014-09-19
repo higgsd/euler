@@ -1,5 +1,5 @@
 -- 162
-import Euler(loadWordFile, wordScore)
+import Euler(readWords, wordScore)
 
 genTri n t
     | x == n = True
@@ -9,5 +9,5 @@ genTri n t
 isTri n = genTri n 1
 
 main = do
-    ws <- loadWordFile "../files/words.txt"
-    putStrLn $ show $ length $ filter isTri $ map wordScore ws
+    s <- readFile "../files/words.txt"
+    putStrLn $ show $ length $ filter isTri $ map wordScore $ readWords s
