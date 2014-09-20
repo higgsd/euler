@@ -1,11 +1,8 @@
 -- 73682
+nn = 200
+cc = [200,100,50,20,10,5,2]
 
-coinCombs n = length [ 1 | a <- [n,n-200..0],
-                           b <- [a,a-100..0],
-                           c <- [b,b-50..0],
-                           d <- [c,c-20..0],
-                           e <- [d,d-10..0],
-                           f <- [e,e-5..0],
-                           _ <- [f,f-2..0] ]
+coinCombs _ [] = 1
+coinCombs n (c:cs) = sum [coinCombs (n-v) cs | v <- [0,c..n]]
 
-main = putStrLn $ show $ coinCombs 200
+main = putStrLn $ show $ coinCombs nn cc

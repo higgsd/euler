@@ -12,7 +12,7 @@ genLines g n = [take n $ f x y | x <- [0..mx-1], y <- [0..my-1],
           diagR x y = zip [x..] [y..]
           diagL x y = zip [x..] [y,y-1..]
 
-gridProd g xs 
+gridProd g xs
     | minimum [x1,x2,y1,y2] < 0 || max x1 x2 >= mx || max y1 y2 >= my = 1
     | otherwise = product $ map (\(x,y) -> g !! y !! x) xs
     where my = length g

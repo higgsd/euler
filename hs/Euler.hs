@@ -1,9 +1,10 @@
 module Euler (
     fibonacci, intSqrt, wordScore, primeSieve, primeFactors, allDivisors,
-    allDivisorsP, nChooseK, readMatrix, readWords,
+    allDivisorsP, nChooseK, digitUsage, digitUsagePad, digitSum, getDigits,
+    readMatrix, readWords,
+
     radicalSieve, isPrimeSimple,
     splitOn, loadMatrixFile,
-    digitUsage, digitUsagePad, digitSum,
     solveQuadratic, isPentagonal,
     isSpecialSumSet, repunitAN, modPow
 ) where
@@ -17,7 +18,7 @@ import Math.Sieve.ONeill(primes)
 
 -- misc
 fibonacci = 1:genFib 0 1
-    where genFib a b = (a+b) : genFib b (a+b) 
+    where genFib a b = (a+b) : genFib b (a+b)
 intSqrt n = floor $ sqrt $ fromIntegral n
 wordScore w = sum $ map (\c -> ord c - ord 'A' + 1) w
 
@@ -37,6 +38,25 @@ allDivisors n = allDivisorsP (primeSieve $ intSqrt n) n
 -- combinatorics
 nChooseK _ 0 = 1
 nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
+
+-- digits
+digitUsage0 ds = countDigit [0..9] $ group $ sort ds
+    where countDigit [] _ = []
+          countDigit (_:cs) [] = 0 : countDigit cs []
+          countDigit (c:cs) (x:xs)
+            | c == head x = length x : countDigit cs xs
+            | otherwise = 0 : countDigit cs (x:xs)
+digitUsagePad p n = digitUsage0 (ds ++ replicate (p - length ds) 0)
+    where ds = getDigits n
+digitUsage n = digitUsage0 $ getDigits n
+
+digitSum n = sum $ getDigits n
+
+getDigits n
+    | n == 0 = [0]
+    | d == 0 = [m]
+    | otherwise = m : getDigits d
+    where (d,m) = n `divMod` 10
 
 -- parsing
 readMatrix s = case AP.parseOnly (matrixParser <* AP.endOfInput) (pack s) of
@@ -81,20 +101,6 @@ splitOn c s = cons (case break (== c) s of
 loadMatrixFile fname = do
     contents <- readFile fname
     return $ map (\x -> map read $ splitOn ',' x) $ lines contents
-
-digitUsageStr s = countDigit "0123456789" $ group $ sort s
-    where countDigit [] _ = []
-          countDigit (_:cs) [] = 0 : countDigit cs []
-          countDigit (c:cs) (x:xs)
-            | c == head x = length x : countDigit cs xs
-            | otherwise = 0 : countDigit cs (x:xs)
-digitUsagePad n p = digitUsageStr (s ++ replicate (p - length s) '0')
-    where s = show n
-digitUsage n = digitUsageStr $ show n
-
-digitSum 0 = 0
-digitSum n = m + digitSum d
-    where (d,m) = n `divMod` 10
 
 solveQuadratic a b c
     | r1 >= 0 = r1

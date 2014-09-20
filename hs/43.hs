@@ -6,7 +6,7 @@ show3 n = replicate (3-length s) '0' ++ s
 
 genAll = [ show h ++ show3 (g * 2) ++ show3 (d * 7) ++ show3 (a * 17) |
            a <- [1..999 `div` 17],
-           let aa = digitUsagePad (a * 17) 3,
+           let aa = digitUsagePad 3 (a*17),
            all (2>) aa,
            b <- [1..999 `div` 13],
            a * 17 `div` 10 == b * 13 `mod` 100,
@@ -14,7 +14,7 @@ genAll = [ show h ++ show3 (g * 2) ++ show3 (d * 7) ++ show3 (a * 17) |
            b * 13 `div` 10 == c * 11 `mod` 100,
            d <- [1..999 `div` 7],
            c * 11 `div` 10 == d * 7 `mod` 100,
-           let dd = digitUsagePad (d * 7) 3,
+           let dd = digitUsagePad 3 (d*7),
            all (2>) dd,
            zipWith min aa dd == replicate 10 0,
            e <- [1..999 `div` 5],
@@ -23,7 +23,7 @@ genAll = [ show h ++ show3 (g * 2) ++ show3 (d * 7) ++ show3 (a * 17) |
            e * 5 `div` 10 == f * 3 `mod` 100,
            g <- [1..999 `div` 2],
            f * 3 `div` 10 == g * 2 `mod` 100,
-           let gg = digitUsagePad (g * 2) 3,
+           let gg = digitUsagePad 3 (g*2),
            all (2>) gg,
            zipWith min aa gg == replicate 10 0,
            zipWith min dd gg == replicate 10 0,

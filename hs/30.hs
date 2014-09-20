@@ -1,8 +1,9 @@
 -- 443839
+import Euler(getDigits)
 
 nn = 5
-vv = (9 ^ nn) * (nn + 1)
 
-digitPowerSum n = sum [ read [c] ^ nn | c <- show n ]
+findPowerSums n = sum $ filter (\x -> x == powerSum x) [10..(n+1)*9^n]
+    where powerSum x = sum $ map (^n) $ getDigits x
 
-main = putStrLn $ show $ sum [ n | n <- [10..vv], n == digitPowerSum n ]
+main = putStrLn $ show $ findPowerSums nn
