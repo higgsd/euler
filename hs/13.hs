@@ -1,8 +1,11 @@
 -- 5537376230
+import Euler(toDigitsBase, fromDigits)
 
-calcSum s = take 10 $ show $ sum $ map read $ words s
+nn = 10
 
-main = putStrLn $ calcSum ss
+calcSum n s = fromDigits $ take n $ toDigitsBase 10 $ sum $ map read $ words s
+
+main = putStrLn $ show $ calcSum nn ss
 
 ss = "\
 \37107287533902102798797998220837590246510135740250 \

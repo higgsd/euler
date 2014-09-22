@@ -1,8 +1,8 @@
 -- 1366
-import Data.Char(ord)
+import Euler(toDigitsBase)
 
 nn = 1000
 
-powerDigitSum n = sum $ map (\c -> ord c - ord '0') $ show $ 2^n
+powerDigitSum n = sum $ toDigitsBase 10 (2^n)
 
 main = putStrLn $ show $ powerDigitSum nn
