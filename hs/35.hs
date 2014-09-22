@@ -1,14 +1,12 @@
 -- 55
 import Data.Array((!), (//), listArray)
-import Euler(primeSieve, getDigitsBase)
+import Euler(primeSieve, toDigitsBase, fromDigits)
 
 nn = 1000000
 
-genCircular n = map (\x -> buildNum $ take k $ drop x $ cycle ds) [1..k]
-    where ds = getDigitsBase 10 n
+genCircular n = map (\x -> fromDigits $ take k $ drop x $ cycle ds) [1..k]
+    where ds = toDigitsBase 10 n
           k = length ds
-          buildNum [] = 0
-          buildNum (x:xs) = x + 10*buildNum xs
 
 countCircularPrimes n = length $ filter isCircularPrime primes
     where primes = primeSieve n

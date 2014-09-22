@@ -1,7 +1,7 @@
 module Euler (
     fibonacci, intSqrt, wordScore, primeSieve, primeFactors, allDivisors,
     allDivisorsP, isPrimeSimple, nChooseK, digitUsage, digitUsagePad, digitSum,
-    getDigitsBase, readMatrix, readWords,
+    toDigitsBase, fromDigits, readMatrix, readWords,
 
     radicalSieve,
     splitOn, loadMatrixFile,
@@ -12,7 +12,7 @@ import Control.Applicative((<*), many)
 import qualified Data.Attoparsec.ByteString.Char8 as AP
 import Data.ByteString.Char8(pack)
 import Data.Char(ord)
-import Data.List((\\), group, nub, sort, subsequences)
+import Data.List((\\), nub, sort, subsequences)
 import Data.Ratio((%), numerator)
 import Math.Sieve.ONeill(primes)
 
@@ -46,23 +46,26 @@ nChooseK _ 0 = 1
 nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
 
 -- digits
-digitUsage0 ds = countDigit [0..9] $ group $ sort ds
-    where countDigit [] _ = []
-          countDigit (_:cs) [] = 0 : countDigit cs []
-          countDigit (c:cs) (x:xs)
-            | c == head x = length x : countDigit cs xs
-            | otherwise = 0 : countDigit cs (x:xs)
-digitUsagePad p n = digitUsage0 (ds ++ replicate (p - length ds) 0)
-    where ds = getDigitsBase 10 n
-digitUsage n = digitUsage0 $ getDigitsBase 10 n
+countDigits0 [] ns = ns
+countDigits0 (x:xs) ns = countDigits0 xs ns2
+    where (a,b) = splitAt x ns
+          ns2 = a ++ [head b + 1] ++ (drop 1 b)
+countDigits xs = countDigits0 xs $ replicate 10 0
 
-digitSum n = sum $ getDigitsBase 10 n
+digitUsagePad p n = countDigits (ds ++ replicate (p - length ds) 0)
+    where ds = toDigitsBase 10 n
+digitUsage n = countDigits $ toDigitsBase 10 n
 
-getDigitsBase b n
+digitSum n = sum $ toDigitsBase 10 n
+
+toDigitsBase0 b n
     | n == 0 = [0]
     | d == 0 = [m]
-    | otherwise = m : getDigitsBase b d
+    | otherwise = m : toDigitsBase0 b d
     where (d,m) = n `divMod` b
+toDigitsBase b n = reverse $ toDigitsBase0 b n
+
+fromDigits ds = sum $ zipWith (*) (reverse ds) (map (10^) [0..])
 
 -- parsing
 readMatrix s = case AP.parseOnly (matrixParser <* AP.endOfInput) (pack s) of
