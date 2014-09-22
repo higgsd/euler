@@ -1,7 +1,7 @@
 -- 121313
-import Data.Array(listArray, elems, (//))
+import Data.Array((//), elems, listArray)
 import Data.Function(on)
-import Data.List(sortBy, groupBy, subsequences)
+import Data.List(groupBy, sortBy, subsequences)
 import Euler(primeSieve)
 
 nn = 8

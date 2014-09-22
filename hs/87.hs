@@ -1,5 +1,5 @@
 -- 1097343
-import Data.List(sort, group)
+import Data.List(group, sort)
 import Euler(intSqrt, primeSieve)
 
 nn = 50000000

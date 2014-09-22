@@ -1,6 +1,6 @@
 -- 107359
 import Data.Bits(xor)
-import Data.Char(isAscii, isAsciiLower, isPrint, chr, ord)
+import Data.Char(chr, isAscii, isAsciiLower, isPrint, ord)
 import Data.List(isInfixOf)
 import Euler(splitOn)
 

@@ -1,7 +1,7 @@
 -- 26033
 import Data.Function(on)
-import Data.List(groupBy, subsequences, intersect)
-import Data.Map(fromList, toList, findWithDefault)
+import Data.List(groupBy, intersect, subsequences)
+import Data.Map(findWithDefault, fromList, toList)
 import Euler(isPrimeSimple, primeSieve)
 
 nn = 5

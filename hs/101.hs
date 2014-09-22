@@ -1,8 +1,7 @@
 -- 37076114526
+import Data.Ratio((%), denominator, numerator)
+
 -- solve simultaneous equations w/ gaussian elimination
-
-import Data.Ratio((%),numerator,denominator)
-
 pp = [1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1]
 
 evalCoef p x n = ((p !! n) * x^n)

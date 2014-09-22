@@ -1,5 +1,5 @@
 -- 18522
-import Data.List(sort, group)
+import Data.List(group, sort)
 
 -- 10k too small, 100k intractible
 nn = 20000

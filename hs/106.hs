@@ -1,5 +1,5 @@
 -- 21384
-import Data.List(subsequences, (\\))
+import Data.List((\\), subsequences)
 
 kk = 12
 

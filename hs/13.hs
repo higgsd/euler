@@ -1,5 +1,5 @@
 -- 5537376230
-import Euler(toDigitsBase, fromDigits)
+import Euler(fromDigits, toDigitsBase)
 
 nn = 10
 

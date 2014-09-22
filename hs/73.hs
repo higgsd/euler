@@ -1,5 +1,5 @@
 -- 7295372
-import Data.Ratio((%),denominator)
+import Data.Ratio((%), denominator)
 
 nn = 12000
 an = 1

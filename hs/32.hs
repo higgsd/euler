@@ -1,6 +1,6 @@
 -- 45228
 import Data.List(nub)
-import Euler(intSqrt, digitUsage, fromDigits)
+import Euler(digitUsage, fromDigits, intSqrt)
 
 kk = 9
 

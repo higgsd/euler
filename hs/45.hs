@@ -1,5 +1,5 @@
 -- 1533776805
-import Euler(solveQuadratic, isPentagonal)
+import Euler(isPentagonal, solveQuadratic)
 
 genHex = map calcHex [144..]
     where calcHex n = n * (2 * n - 1)

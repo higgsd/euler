@@ -1,5 +1,6 @@
 -- 16475640049
 import Euler(nChooseK)
+
 mm = 3
 nn = 50
 

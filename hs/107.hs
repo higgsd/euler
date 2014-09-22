@@ -1,7 +1,7 @@
 -- 259679
-import Data.Array(listArray, assocs, range, bounds, (!), (//))
+import Data.Array((!), (//), assocs, bounds, listArray, range)
 import Data.Function(on)
-import Data.List(sort, nub, sortBy)
+import Data.List(nub, sort, sortBy)
 import Euler(splitOn)
 
 parseNetwork ws = listArray ((0,0),(n,n)) (parseEdges ws)

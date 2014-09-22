@@ -1,5 +1,5 @@
 -- 73702
-import Euler(splitOn,isSpecialSumSet)
+import Euler(isSpecialSumSet, splitOn)
 
 parseSets [] = []
 parseSets (x:xs) = ss : parseSets xs

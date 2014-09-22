@@ -1,6 +1,6 @@
 -- 748317
 import Data.List(inits, tails)
-import Euler(isPrimeSimple, fromDigits)
+import Euler(fromDigits, isPrimeSimple)
 
 nn = 11
 aa = [2,3,5,7] -- first digit must be prime, so final right-trunc is prime

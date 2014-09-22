@@ -1,6 +1,6 @@
 -- 7587457
-import Data.List(delete, sort, nub, (\\), intersect)
-import Euler(primeSieve, primeFactors)
+import Data.List((\\), delete, intersect, nub, sort)
+import Euler(primeFactors, primeSieve)
 
 kk = 12000
 primes = primeSieve $ 2 * kk

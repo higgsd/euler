@@ -1,6 +1,6 @@
 -- 4179871
-import Data.Array(array, (!))
-import Euler(intSqrt, primeSieve, allDivisorsP)
+import Data.Array((!), array)
+import Euler(allDivisorsP, intSqrt, primeSieve)
 
 nn = 28123
 

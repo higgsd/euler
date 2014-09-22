@@ -1,5 +1,5 @@
 -- 71
-import Data.List(sort,group)
+import Data.List(group, sort)
 import Euler(primeSieve)
 
 mm = 5000

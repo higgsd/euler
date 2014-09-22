@@ -1,5 +1,5 @@
 -- 932718654
-import Euler(toDigitsBase, fromDigits, digitUsage)
+import Euler(digitUsage, fromDigits, toDigitsBase)
 
 nn = 9
 

@@ -1,5 +1,5 @@
 -- 161667
-import Data.Array(accumArray,elems)
+import Data.Array(accumArray, elems)
 
 nn = 1500000
 

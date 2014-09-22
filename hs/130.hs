@@ -1,5 +1,5 @@
 -- 149253
-import Euler(repunitAN, isPrimeSimple)
+import Euler(isPrimeSimple, repunitAN)
 
 nn = 25
 

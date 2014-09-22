@@ -1,7 +1,7 @@
 -- 14316
-import Data.Array(listArray, bounds, (!))
+import Data.Array((!), bounds, listArray)
 import Data.List(group)
-import Euler(intSqrt, primeSieve, primeFactors)
+import Euler(intSqrt, primeFactors, primeSieve)
 
 nn = 1000000
 primes = primeSieve (intSqrt nn)

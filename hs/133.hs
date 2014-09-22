@@ -1,5 +1,5 @@
 -- 453647705
-import Euler(primeSieve, modPow)
+import Euler(modPow, primeSieve)
 
 nn = 10^5
 

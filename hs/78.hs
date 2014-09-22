@@ -1,5 +1,5 @@
 -- 55374
-import Data.Array(array,(!))
+import Data.Array((!), array)
 
 nn = 1000000
 

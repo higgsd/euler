@@ -1,5 +1,5 @@
 -- 843296
-import Data.List(sort, nub, subsequences)
+import Data.List(nub, sort, subsequences)
 import Euler(primeFactors, primeSieve)
 
 nn = 10^9

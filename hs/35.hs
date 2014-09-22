@@ -1,6 +1,6 @@
 -- 55
 import Data.Array((!), (//), listArray)
-import Euler(primeSieve, toDigitsBase, fromDigits)
+import Euler(fromDigits, primeSieve, toDigitsBase)
 
 nn = 1000000
 

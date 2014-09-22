@@ -1,6 +1,6 @@
 -- 428570
 import Data.List(sort)
-import Data.Ratio((%),numerator,denominator)
+import Data.Ratio((%), numerator, denominator)
 
 mm = 1000000
 cc = 1000

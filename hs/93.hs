@@ -1,7 +1,7 @@
 -- 1258
 import Data.Function(on)
-import Data.List(permutations, sort, sortBy, group)
-import Data.Ratio(numerator, denominator)
+import Data.List(group, permutations, sort, sortBy)
+import Data.Ratio(denominator, numerator)
 
 invnum = -101010101
 myadd a b

@@ -1,6 +1,6 @@
 -- 101524
 import Data.Function(on)
-import Data.List(sortBy, groupBy)
+import Data.List(groupBy, sortBy)
 import Data.Ratio((%))
 import Text.Printf(printf)
 

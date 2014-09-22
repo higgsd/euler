@@ -1,6 +1,6 @@
 -- 9350130049860600
 import Data.List(group)
-import Euler(primeSieve, primeFactors)
+import Euler(primeFactors, primeSieve)
 
 nn = 4000000
 kk = head [n | n <- [1..], 3^n > nn]

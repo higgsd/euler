@@ -1,5 +1,5 @@
 -- 997651
-import Data.Array(listArray, (!), (//))
+import Data.Array((!), (//), listArray)
 import Euler(primeSieve)
 
 nn = 1000000
