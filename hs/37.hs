@@ -3,21 +3,23 @@ import Data.List(inits, tails)
 import Euler(isPrimeSimple)
 
 nn = 11
-pfirst = ["2","3","5","7"]
-pmiddle = ["1","3","7","9"]
-plast = ["3","7"]
+aa = [2,3,5,7] -- first digit must be prime, so final right-trunc is prime
+bb = [1,3,7,9] -- middle digit must be odd, so intermediate truncs are prime
+cc = [3,7] -- last digit must be an odd prime, so final left-trunc is prime
 
-isTrunc s = all (isPrimeSimple . read) (firsts ++ lasts)
-    where firsts = tail $ inits s
-          lasts = tail . reverse . tail $ tails s
+buildNum [] = 0
+buildNum (x:xs) = x + 10*buildNum xs
 
-genMiddles 0 xs = xs
-genMiddles n [] = genMiddles (n-1) pmiddle
-genMiddles n xs = genMiddles (n-1) [c ++ x | c <- pmiddle, x <- xs]
+isTrunc xs = all (isPrimeSimple.buildNum) $ left ++ right
+    where left = tail $ inits xs
+          right = tail $ init $ tails xs
 
-genDigits 0 = [a ++ c | a <- pfirst, c <- plast]
-genDigits n = [a ++ b ++ c | a <- pfirst, b <- genMiddles n [], c <- plast]
+sumTruncs n = sum $ take n $ map buildNum $
+              filter isTrunc $ concatMap genDigits [0..]
+    where genDigits 0 = [[c,a] | a <- aa, c <- cc]
+          genDigits d = [[c]++b++[a] | a <- aa, c <- cc, b <- genMiddles d []]
+          genMiddles 0 xs = xs
+          genMiddles d [] = genMiddles (d-1) [[b] | b <- bb]
+          genMiddles d xss = genMiddles (d-1) [b:xs | b <- bb, xs <- xss]
 
-allTruncs = [ read s | n <- [0..], s <- genDigits n, isTrunc s ]
-
-main = putStrLn $ show $ sum $ take nn $ allTruncs
+main = putStrLn $ show $ sumTruncs nn

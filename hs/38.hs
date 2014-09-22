@@ -1,20 +1,21 @@
 -- 932718654
-import Euler(digitUsage)
+import Euler(getDigitsBase, digitUsage)
 
 nn = 9
-mm = 10 ^ (nn `div` 2)
 
-isPandigital s = digitUsage 123456789 == digitUsage n
-    where n :: Int
-          n = read s
+buildNum [] = 0
+buildNum (x:xs) = x + 10*buildNum xs
 
-makePan n d s
-    | length s >= nn = s
-    | otherwise = makePan n (d+1) s2
-    where s2 = s ++ (show $ n * d)
-genPan n = makePan n 1 ""
+genMult0 _ [] _ = error "genMult0: empty"
+genMult0 xs (y:ys) n
+    | length xs2 == n = buildNum xs2
+    | length xs2 > n = 0
+    | otherwise = genMult0 xs2 ys n
+    where xs2 = getDigitsBase 10 y ++ xs
+genMult n x = genMult0 [] [x,x+x..] n
 
-allPans :: [Int]
-allPans = map read [ s | s <- map genPan [1..mm], isPandigital s ]
+largestPanMult n = maximum $ filter isPandigital $ map (genMult n) [1..z-1]
+    where z = 10^(n `div` 2) -- need to generate at least 2 numbers
+          isPandigital x = digitUsage (buildNum [1..n]) == digitUsage x
 
-main = putStrLn $ show $ maximum allPans
+main = putStrLn $ show $ largestPanMult nn

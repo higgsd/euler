@@ -1,10 +1,11 @@
 -- 40730
+import Euler(getDigitsBase)
 
-factorial n = product [2..n]
+-- check from first two digit number
+-- up to the maximum value that could be produced
+-- 9! = 362880, no more than seven 9 digits
+allFactSums = sum $ filter (\x -> x == factSum x) [10..7*factorial 9]
+    where factorial n = product [2..n]
+          factSum n = sum $ map factorial $ getDigitsBase 10 n
 
-factSum n = sum $ map factDigit $ show n
-    where factDigit c = factorial $ read [c]
-
-allFactSums = [ n | n <- [11 .. 7 * factorial 9], n == factSum n]
-
-main = putStrLn $ show $ sum $ allFactSums
+main = putStrLn $ show $ allFactSums

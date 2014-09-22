@@ -1,21 +1,14 @@
 -- 840
-import Data.List(sort, group)
+import Data.List(group, sort)
 
 nn = 1000
 
-integerTri a b
-    | cc == fromIntegral c && a + b + c <= nn = Just $ a + b + c
-    | otherwise = Nothing
-    where cc = sqrt $ fromIntegral $ a * a + b * b
-          c = floor cc
+genPerims n = [a+b+c | a <- [1..n `div` 3], b <- [a..n-a `div` 2],
+                       let c2 = a*a + b*b,
+                       let c = floor $ sqrt $ fromIntegral c2,
+                       c*c == c2, n >= a+b+c]
 
-triPerims = [ integerTri a b | a <- [1..nn `div` 2], b <- [a..nn `div` 2] ]
+mostFreqPerim n = snd $ maximum $ map (\x -> (length x, head x)) $
+                  group $ sort $ genPerims n
 
-filterPerims [] = []
-filterPerims ([]:_) = error "unreachable"
-filterPerims ((Nothing:_):xss) = filterPerims xss
-filterPerims ((Just x:xs):xss) = [(1 + length xs, x)] ++ filterPerims xss
-
-mostFreqPerim = snd $ maximum $ filterPerims $ group $ sort $ triPerims
-
-main = putStrLn $ show $ mostFreqPerim
+main = putStrLn $ show $ mostFreqPerim nn

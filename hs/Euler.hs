@@ -1,9 +1,9 @@
 module Euler (
     fibonacci, intSqrt, wordScore, primeSieve, primeFactors, allDivisors,
-    allDivisorsP, nChooseK, digitUsage, digitUsagePad, digitSum, getDigits,
-    readMatrix, readWords,
+    allDivisorsP, isPrimeSimple, nChooseK, digitUsage, digitUsagePad, digitSum,
+    getDigitsBase, readMatrix, readWords,
 
-    radicalSieve, isPrimeSimple,
+    radicalSieve,
     splitOn, loadMatrixFile,
     solveQuadratic, isPentagonal,
     isSpecialSumSet, repunitAN, modPow
@@ -35,6 +35,12 @@ primeFactors (p:ps) n
 allDivisorsP ps n = sort $ nub $ map product $ subsequences $ primeFactors ps n
 allDivisors n = allDivisorsP (primeSieve $ intSqrt n) n
 
+isPrimeSimple n
+    | n < 2 = False
+    | n == 2 = True
+    | even n = False
+    | otherwise = all (\p -> n `mod` p /= 0) [3,5..intSqrt n]
+
 -- combinatorics
 nChooseK _ 0 = 1
 nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
@@ -47,16 +53,16 @@ digitUsage0 ds = countDigit [0..9] $ group $ sort ds
             | c == head x = length x : countDigit cs xs
             | otherwise = 0 : countDigit cs (x:xs)
 digitUsagePad p n = digitUsage0 (ds ++ replicate (p - length ds) 0)
-    where ds = getDigits n
-digitUsage n = digitUsage0 $ getDigits n
+    where ds = getDigitsBase 10 n
+digitUsage n = digitUsage0 $ getDigitsBase 10 n
 
-digitSum n = sum $ getDigits n
+digitSum n = sum $ getDigitsBase 10 n
 
-getDigits n
+getDigitsBase b n
     | n == 0 = [0]
     | d == 0 = [m]
-    | otherwise = m : getDigits d
-    where (d,m) = n `divMod` 10
+    | otherwise = m : getDigitsBase b d
+    where (d,m) = n `divMod` b
 
 -- parsing
 readMatrix s = case AP.parseOnly (matrixParser <* AP.endOfInput) (pack s) of
@@ -83,12 +89,6 @@ readWords s = case AP.parseOnly (lineParser <* AP.endOfInput) (pack s) of
 radicalSieve n = map calcRad [0..n]
     where calcRad y = (y, product $ nub $ primeFactors pp y)
           pp = primeSieve $ intSqrt n
-
-isPrimeSimple n
-    | n < 2 = False
-    | n == 2 = True
-    | even n = False
-    | otherwise = all (\p -> n `mod` p /= 0) [3,5..intSqrt n]
 
 -- adapted from GHC 'lines'
 splitOn _ "" = []

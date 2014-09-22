@@ -1,20 +1,12 @@
 -- 872187
+import Euler(getDigitsBase)
+
 nn = 1000000
+bb = [2,10]
 
-inBase2 n
-    | n == 0 = ""
-    | n `mod` 2 == 0 = (inBase2 nx) ++ "0"
-    | otherwise = (inBase2 nx) ++ "1"
-    where nx = n `div` 2
+-- only odd numbers can be base-2 palindromic
+sumPalindromes n bs = sum $ filter isPalinBoth [1,3..n]
+    where isPalinBoth x = all (\b -> isPalindrome $ getDigitsBase b x) bs
+          isPalindrome xs = xs == reverse xs
 
-isPalindrome s = s == (reverse s)
-
-sumPalin [] = 0
-sumPalin (n:ns)
-    | isPalindrome n10 && isPalindrome n2 = n + nx
-    | otherwise = nx
-    where n2 = inBase2 n
-          n10 = show n
-          nx = sumPalin ns
-
-main = putStrLn $ show $ sumPalin [1,3..nn]
+main = putStrLn $ show $ sumPalindromes nn bb

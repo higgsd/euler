@@ -1,22 +1,18 @@
 -- 55
-import Data.Array(listArray, (!), (//))
-import Euler(primeSieve)
+import Data.Array((!), (//), listArray)
+import Euler(primeSieve, getDigitsBase)
 
 nn = 1000000
 
-buildCircular _ _ [] = error "unreachable"
-buildCircular s ns (x:xs)
-    | s == s2 = ns
-    | otherwise = buildCircular s (read s2:ns) s2
-    where s2 = xs ++ [x]
+genCircular n = map (\x -> buildNum $ take k $ drop x $ cycle ds) [1..k]
+    where ds = getDigitsBase 10 n
+          k = length ds
+          buildNum [] = 0
+          buildNum (x:xs) = x + 10*buildNum xs
 
-allCircular n = buildCircular s [n] s
-    where s = show n
-
-isCircularPrime n pa = all (pa !) $ allCircular n
-
-allCircularPrimes n = [ p | p <- primes, isCircularPrime p pa ]
+countCircularPrimes n = length $ filter isCircularPrime primes
     where primes = primeSieve n
-          pa = (listArray (0,n) $ repeat False) // [(x,True) | x <- primes]
+          a = (listArray (2,n) $ repeat False) // [(x,True) | x <- primes]
+          isCircularPrime p = all (a!) $ genCircular p
 
-main = putStrLn $ show $ length $ allCircularPrimes nn
+main = putStrLn $ show $ countCircularPrimes nn
