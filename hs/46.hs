@@ -1,14 +1,10 @@
 -- 5777
-import Euler(isPrimeSimple, primeSieve)
+import Data.List.Ordered(minus)
+import Euler(allPrimes, intSqrt)
 
-nn = 10000
+goldFail = head $ filter (not.isGold) $ [3,5..] `minus` allPrimes
+    where isSquare x = x == (intSqrt x)^2
+          isGold x = any isSquare $ map (\y -> (x-y) `div` 2) $
+                     takeWhile (x>) $ drop 1 allPrimes
 
-oddComps = [ n | n <- [3,5..], not $ isPrimeSimple n ]
-failsConj = [ n | n <- oddComps, not $ meetsConj n ]
-    where primesLess n = takeWhile (n >) $ primeSieve nn
-          doHalve n = (fromIntegral n) / 2
-          isIntegral n = n == (fromIntegral $ floor n)
-          isSqrt n = isIntegral . sqrt . doHalve . (\x -> n - x)
-          meetsConj n = any (isSqrt n) $ primesLess n
-
-main = putStrLn $ show $ head $ failsConj
+main = putStrLn $ show $ goldFail

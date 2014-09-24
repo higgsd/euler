@@ -1,6 +1,6 @@
 -- 843296
 import Data.List(nub, sort, subsequences)
-import Euler(primeFactors, primeSieve)
+import Euler(primeFactorsP, primeSieve)
 
 nn = 10^9
 kk = 40
@@ -14,9 +14,9 @@ pp = primeSieve mm
 -- divisors of n, evaluated at ten, divided by nine.  Since O1(10) is nine, the
 -- division is ignored.
 
-divisors = nub $ sort $ map product $ subsequences $ primeFactors [2,5] nn
+divisors = nub $ sort $ map product $ subsequences $ primeFactorsP [2,5] nn
 repFactors = take tt $ map (cyclotomic 10) (drop 1 divisors)
-repPrimes = sort $ filter (mm>) $ concatMap (primeFactors pp) repFactors
+repPrimes = sort $ filter (mm>) $ concatMap (primeFactorsP pp) repFactors
 
 -- assumes n is a product of either 2 or 5, in any quantity
 cyclotomic x n

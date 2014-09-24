@@ -1,8 +1,11 @@
 -- 9110846700
+import Euler(modPow)
 
 nn = 1000
-pp = 10
+kk = 10
 
-main = putStrLn $ show $ s `mod` p
-    where s = sum [ i ^ i | i <- [1..nn] ]
-          p = 10 ^ pp
+sumSelfPowers n k = s `mod` p
+    where p = 10^k
+          s = sum [modPow x x p | x <- [1..n]]
+
+main = putStrLn $ show $ sumSelfPowers nn kk

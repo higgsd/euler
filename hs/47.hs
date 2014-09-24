@@ -1,15 +1,13 @@
 -- 134043
-import Data.List(group, sort)
-import Euler(primeSieve)
+import Data.List(genericIndex, genericLength, group)
+import Euler(primeFactors)
 
-nn = 200000
+nn = 4
 
-nfactorSieve n = map (\x -> length x - 1) $ group $ sort ps
-    where ps = concat $ [0..n] : [[x*2,x*3..n] | x <- primeSieve n]
+findSeqFactors n = matchSeq findFactors
+    where matchSeq (x:xs) = if xs `genericIndex` (n-2) == x+n-1
+                            then x else matchSeq xs
+          findFactors = filter hasFactors [1..]
+          hasFactors x = (genericLength $ group $ primeFactors x) == n
 
-matchn n xs
-    | cs == replicate n n = head ns
-    | otherwise = matchn n $ tail xs
-    where (ns,cs) = unzip $ take n xs
-
-main = putStrLn $ show $ matchn 4 $ zip [0..nn] $ nfactorSieve nn
+main = putStrLn $ show $ findSeqFactors nn

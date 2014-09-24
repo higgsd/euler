@@ -1,7 +1,7 @@
 -- 14316
 import Data.Array((!), bounds, listArray)
 import Data.List(group)
-import Euler(intSqrt, primeFactors, primeSieve)
+import Euler(intSqrt, primeFactorsP, primeSieve)
 
 nn = 1000000
 primes = primeSieve (intSqrt nn)
@@ -9,7 +9,7 @@ primes = primeSieve (intSqrt nn)
 buildNext n = listArray (2,n) [divFunction x | x <- [2..n]]
 
 divFunction n = product [sum [p^ai | ai <- [0..a]] | (a,p) <- xs] - n
-    where ds = primeFactors primes n
+    where ds = primeFactorsP primes n
           xs = zip (map length $ group ds) (map head $ group ds)
 
 chainLength0 a s xs

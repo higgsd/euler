@@ -1,12 +1,14 @@
 module Euler (
-    intSqrt, wordScore, solveQuadratic, fibonacci, triangular, pentagonal,
-    hexagonal, primeSieve, primeFactors, allDivisors, allDivisorsP,
-    isPrimeSimple, nChooseK, digitUsage, digitUsagePad, digitSum, toDigitsBase,
-    fromDigits, readMatrix, readWords,
+    intSqrt, wordScore, nChooseK, solveQuadratic, modPow,
+    fibonacci, triangular, pentagonal, hexagonal,
+    allPrimes, primeSieve, primeFactors, primeFactorsP, allDivisors,
+    allDivisorsP, isPrimeSimple,
+    digitUsage, digitUsagePad, digitSum, toDigitsBase, fromDigits,
+    readMatrix, readWords,
 
     radicalSieve,
     splitOn, loadMatrixFile,
-    isSpecialSumSet, repunitAN, modPow
+    isSpecialSumSet, repunitAN
 ) where
 import Control.Applicative((<*), many)
 import qualified Data.Attoparsec.ByteString.Char8 as AP
@@ -21,12 +23,21 @@ intSqrt n = floor $ sqrt $ fromIntegral n
 wordScore w = sum $ map (fromIntegral.score) w
     where score c = ord c - ord 'A' + 1
 
+nChooseK _ 0 = 1
+nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
+
 solveQuadratic a b c
     | r1 >= 0 = r1
     | otherwise = r2
     where delta = sqrt (b * b - 4 * a * c)
           r1 = (delta - b) / (2 * a)
           r2 = (-delta - b) / (2 * a)
+
+-- binary method = x^n mod d
+modPow x n d = fst $ iterate modPow0 (1, (x `mod` d, n)) !! v
+    where v = (floor $ logBase 2 $ fromIntegral n) + 1
+          modPow0 (r,(b,e)) = (if odd e then r*b `mod` d else r,
+                               (b^2 `mod` d, e `div` 2))
 
 -- sequences
 fibonacci = 1:genFib 0 1
@@ -39,16 +50,18 @@ hexagonal = genHex 0 1
     where genHex p i = (p+i) : genHex (p+i) (i+4)
 
 -- primes, factoring, etc.
+allPrimes = primes
 primeSieve n = takeWhile (n>=) primes
 
-primeFactors [] n = [n]
-primeFactors (p:ps) n
-    | p >= n = [n]
-    | m == 0 = p : primeFactors (p:ps) d
-    | otherwise = primeFactors ps n
+primeFactorsP [] n = [n]
+primeFactorsP (p:ps) n
+    | p > intSqrt n = [n]
+    | m == 0 = p : primeFactorsP (p:ps) d
+    | otherwise = primeFactorsP ps n
     where (d,m) = n `divMod` p
+primeFactors n = primeFactorsP allPrimes n
 
-allDivisorsP ps n = sort $ nub $ map product $ subsequences $ primeFactors ps n
+allDivisorsP ps n = sort $ nub $ map product $ subsequences $ primeFactorsP ps n
 allDivisors n = allDivisorsP (primeSieve $ intSqrt n) n
 
 isPrimeSimple n
@@ -56,10 +69,6 @@ isPrimeSimple n
     | n == 2 = True
     | even n = False
     | otherwise = all (\p -> n `mod` p /= 0) [3,5..intSqrt n]
-
--- combinatorics
-nChooseK _ 0 = 1
-nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
 
 -- digits
 countDigits0 [] ns = ns
@@ -106,7 +115,7 @@ readWords s = case AP.parseOnly (lineParser <* AP.endOfInput) (pack s) of
 
 -- XXX unsorted
 radicalSieve n = map calcRad [0..n]
-    where calcRad y = (y, product $ nub $ primeFactors pp y)
+    where calcRad y = (y, product $ nub $ primeFactorsP pp y)
           pp = primeSieve $ intSqrt n
 
 -- adapted from GHC 'lines'
@@ -138,9 +147,3 @@ repunitAN0 r k n
     | otherwise = repunitAN0 r2 (k+1) n
     where r2 = (10*r+1) `mod` n
 repunitAN n = if gcd n 10 == 1 then repunitAN0 1 1 n else 0
-
--- binary method
-modPow x n d = fst $ iterate modPow0 (1, (x `mod` d, n)) !! v
-    where v = ceiling $ logBase 2 $ fromIntegral n
-          modPow0 (r,(b,e)) = (if odd e then r*b `mod` d else r,
-                               (b^2 `mod` d, e `div` 2))

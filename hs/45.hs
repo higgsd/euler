@@ -4,6 +4,9 @@ import Euler(triangular, pentagonal, hexagonal)
 
 nn = 143
 
+-- walk the pentagonal and triangular lists
+-- check whether the hexagonal value is in them
+-- also provide the remainder of each list for the next check
 walkSet n ps ts = (member n $ isect ps2 ts2, ps3, ts3)
     where (ps2,ps3) = span (n>=) ps
           (ts2,ts3) = span (n>=) ts
