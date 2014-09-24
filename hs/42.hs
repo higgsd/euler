@@ -1,13 +1,9 @@
 -- 162
-import Euler(readWords, wordScore)
+import Data.List.Ordered(has)
+import Euler(readWords, triangular, wordScore)
 
-genTri n t
-    | x == n = True
-    | x > n = False
-    | otherwise = genTri n (t+1)
-    where x = t * (t+1) `div` 2
-isTri n = genTri n 1
+countTri s = length $ filter (has triangular) $ map wordScore $ readWords s
 
 main = do
     s <- readFile "../files/words.txt"
-    putStrLn $ show $ length $ filter isTri $ map wordScore $ readWords s
+    putStrLn $ show $ countTri s

@@ -1,11 +1,11 @@
 module Euler (
-    fibonacci, intSqrt, wordScore, primeSieve, primeFactors, allDivisors,
-    allDivisorsP, isPrimeSimple, nChooseK, digitUsage, digitUsagePad, digitSum,
-    toDigitsBase, fromDigits, readMatrix, readWords,
+    intSqrt, wordScore, solveQuadratic, fibonacci, triangular, pentagonal,
+    hexagonal, primeSieve, primeFactors, allDivisors, allDivisorsP,
+    isPrimeSimple, nChooseK, digitUsage, digitUsagePad, digitSum, toDigitsBase,
+    fromDigits, readMatrix, readWords,
 
     radicalSieve,
     splitOn, loadMatrixFile,
-    solveQuadratic, isPentagonal,
     isSpecialSumSet, repunitAN, modPow
 ) where
 import Control.Applicative((<*), many)
@@ -17,10 +17,26 @@ import Data.Ratio((%), numerator)
 import Math.Sieve.ONeill(primes)
 
 -- misc
+intSqrt n = floor $ sqrt $ fromIntegral n
+wordScore w = sum $ map (fromIntegral.score) w
+    where score c = ord c - ord 'A' + 1
+
+solveQuadratic a b c
+    | r1 >= 0 = r1
+    | otherwise = r2
+    where delta = sqrt (b * b - 4 * a * c)
+          r1 = (delta - b) / (2 * a)
+          r2 = (-delta - b) / (2 * a)
+
+-- sequences
 fibonacci = 1:genFib 0 1
     where genFib a b = (a+b) : genFib b (a+b)
-intSqrt n = floor $ sqrt $ fromIntegral n
-wordScore w = sum $ map (\c -> ord c - ord 'A' + 1) w
+triangular = genTri 0 1
+    where genTri t i = (t+i) : genTri (t+i) (i+1)
+pentagonal = genPent 0 1
+    where genPent p i = (p+i) : genPent (p+i) (i+3)
+hexagonal = genHex 0 1
+    where genHex p i = (p+i) : genHex (p+i) (i+4)
 
 -- primes, factoring, etc.
 primeSieve n = takeWhile (n>=) primes
@@ -65,7 +81,7 @@ toDigitsBase0 b n
     where (d,m) = n `divMod` b
 toDigitsBase b n = reverse $ toDigitsBase0 b n
 
-fromDigits ds = sum $ zipWith (*) (reverse ds) (map (10^) [0..])
+fromDigits ds = sum $ zipWith (*) (reverse ds) (iterate (10*) 1)
 
 -- parsing
 readMatrix s = case AP.parseOnly (matrixParser <* AP.endOfInput) (pack s) of
@@ -104,16 +120,6 @@ splitOn c s = cons (case break (== c) s of
 loadMatrixFile fname = do
     contents <- readFile fname
     return $ map (\x -> map read $ splitOn ',' x) $ lines contents
-
-solveQuadratic a b c
-    | r1 >= 0 = r1
-    | otherwise = r2
-    where delta = sqrt (b * b - 4 * a * c)
-          r1 = (delta - b) / (2 * a)
-          r2 = (-delta - b) / (2 * a)
-
-isPentagonal n = r == (fromIntegral $ floor r)
-    where r = solveQuadratic 1.5 (-0.5) (fromIntegral $ -n)
 
 isSpecialSumSet a
     | nub a /= a = False

@@ -1,13 +1,14 @@
 -- 7652413
 import Data.List(permutations, sort)
-import Euler(isPrimeSimple)
+import Euler(fromDigits, isPrimeSimple)
 
 nn = 7
 
-genPan n
-    | n == 1 = []
-    | sum [1..n] `mod` 3 == 0 = genPan (n-1)
-    | otherwise = (reverse $ sort npan) ++ genPan (n-1)
-    where npan = map (read . concatMap show) $ permutations [1..n]
+panPrimes 0 = []
+panPrimes n = filter isPrimeSimple xs ++ ys
+    where ys = panPrimes (n-1)
+          xs = reverse $ sort $ map fromDigits $ permutations [1..n]
 
-main = putStrLn $ show $ head $ filter isPrimeSimple $ genPan nn
+maxPrime n = head $ panPrimes n
+
+main = putStrLn $ show $ maxPrime nn

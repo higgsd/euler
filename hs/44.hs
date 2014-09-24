@@ -1,10 +1,15 @@
 -- 5482660
-import Euler(isPentagonal)
+import Euler(pentagonal, solveQuadratic)
 
-genPent = filter even $ map calcPent [1..]
-    where calcPent i = i * (3 * i - 1) `div` 2
+-- find pentagonal sum a+b first
+-- find first a that produces pentagonal b and b-a
+-- minimal sum happens to also produce minimal difference
+-- smarter/faster algorithm required if checking minimal differences
 
-findPent = [ i - j | i <- genPent, j <- takeWhile (i >) genPent,
-                     isPentagonal $ i - j, isPentagonal $ i + j ]
+isPentagonal n = r == (fromIntegral $ floor r)
+    where r = solveQuadratic 1.5 (-0.5) (fromIntegral $ -n)
 
-main = putStrLn $ show $ head findPent
+findPent = head [b-a | c <- pentagonal, a <- takeWhile (c `div` 2>) pentagonal,
+                       let b = c-a, isPentagonal b, isPentagonal (b-a)]
+
+main = putStrLn $ show $ findPent
