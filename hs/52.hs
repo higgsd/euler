@@ -3,10 +3,8 @@ import Euler(digitUsage)
 
 nn = 6
 
-dvalues d = [10^d..10^(d+1) `div` nn]
+firstMult n = head $ filter isPermMult allVals
+    where isPermMult x = all (\y -> digitUsage x == digitUsage (x*y)) [2..n]
+          allVals = concatMap (\x -> [10^x..10^(x+1) `div` n]) [1..]
 
-isPermMult n = all (\x -> digitUsage n == digitUsage (x*n)) [2..nn]
-
-firstMult = head [ n | d <- [1..], n <- dvalues d, isPermMult n ]
-
-main = putStrLn $ show $ firstMult
+main = putStrLn $ show $ firstMult nn

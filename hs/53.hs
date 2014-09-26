@@ -1,9 +1,9 @@
 -- 4075
-nn = 1000000
-mm = 100
+import Euler(nChooseK)
 
-fact 0 = 1
-fact n = product [1..n]
-comb n r = fact n `div` fact r `div` fact (n-r)
+vv = 1000000
+nn = 100
 
-main = putStrLn $ show $ length [() | r <- [1..mm], n <- [r..mm], comb n r > nn]
+numCombs v n = length $ filter (>v) [nChooseK r k | k <- [1..n], r <- [k..n]]
+
+main = putStrLn $ show $ numCombs vv nn

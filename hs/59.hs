@@ -1,24 +1,25 @@
 -- 107359
+import Control.Applicative((<*))
+import qualified Data.Attoparsec.ByteString.Char8 as AP
 import Data.Bits(xor)
-import Data.Char(chr, isAscii, isAsciiLower, isPrint, ord)
+import Data.ByteString.Char8(pack)
+import Data.Char(chr, isPrint, ord)
 import Data.List(isInfixOf)
-import Euler(splitOn)
 
-parseText xs = map read $ splitOn ',' xs
+readCode s = case AP.parseOnly (codeParser <* AP.endOfInput) (pack s) of
+                Left e -> error $ "readCode: " ++ e
+                Right xs -> head $ filter (not.null) xs
+    where codeParser = lineParser `AP.sepBy` AP.endOfLine
+          lineParser = AP.decimal `AP.sepBy` (AP.char ',')
 
-genKeys = [[a,b,c] | a <- [0..255], isAsciiLower $ chr a,
-                     b <- [0..255], isAsciiLower $ chr b,
-                     c <- [0..255], isAsciiLower $ chr c]
+isDecoded xs = all isPrint s && isInfixOf " the " s
+    where s = map chr xs
 
-xorText xs ks = map chr $ zipWith xor xs $ cycle ks
-
-isPrintable xs = all (\c -> isPrint c && isAscii c) xs
-
-decode xs = head [tx | ks <- genKeys, let tx = xorText xs ks,
-                       isPrintable tx, " the " `isInfixOf` tx]
-
-asciiScore xs = sum $ map ord xs
+decodedScore xs = sum $ head $ filter isDecoded $ map decrypt keys
+    where keys = [[a,b,c] | let ks = [ord 'a'..ord 'z'],
+                            a <- ks, b <- ks, c <- ks]
+          decrypt ks = zipWith xor xs $ cycle ks
 
 main = do
-    contents <- readFile "../files/cipher1.txt"
-    putStrLn $ show $ asciiScore $ decode $ parseText contents
+    s <- readFile "../files/cipher1.txt"
+    putStrLn $ show $ decodedScore $ readCode s

@@ -97,11 +97,7 @@ readMatrix s = case AP.parseOnly (matrixParser <* AP.endOfInput) (pack s) of
                 Left e -> error $ "readMatrix: " ++ e
                 Right xs -> filter (not.null) xs
     where matrixParser = lineParser `AP.sepBy` AP.endOfLine
-          lineParser = intParser `AP.sepBy` (AP.char ' ')
-          intParser :: AP.Parser Int
-          intParser = do
-              v <- AP.count 2 AP.digit
-              return $ read v
+          lineParser = AP.decimal `AP.sepBy` (AP.char ' ')
 
 readWords s = case AP.parseOnly (lineParser <* AP.endOfInput) (pack s) of
                 Left e -> error $ "readWords: " ++ e

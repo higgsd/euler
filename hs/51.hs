@@ -1,28 +1,33 @@
 -- 121313
-import Data.Array((//), elems, listArray)
 import Data.Function(on)
-import Data.List(groupBy, sortBy, subsequences)
-import Euler(primeSieve)
+import Data.List((\\), groupBy, sortBy, subsequences)
+import Euler(allPrimes, fromDigits, toDigitsBase)
 
 nn = 8
-dd = 6
-mm = 10 ^ dd
 
-dprimes d = takeWhile (10^d >) $ dropWhile (10^(d-1) >) $ primeSieve mm
+-- given a sequence of primes (broken into digits)
+-- and digit indices to keep and wildcard
+-- 1) ensure wildcarded digits are all the same
+-- 2) sort into bins by kept digits
+-- 3) produce minimum prime from all correctly sized buckets
+wildPrimes n xs (ks,ws) = map (fromDigits.fst.head) $
+                          filter (\x -> length x == n) $
+                          groupBy ((==) `on` snd) $ sortBy (compare `on` snd) $
+                          map (\(x,_) -> (x, exDigits ks x)) $
+                          filter (\(_,(y:ys)) -> all (==y) ys) $
+                          zip xs (map (exDigits ws) xs)
+    where exDigits ds ns = map (ns!!) ds
 
-hasSameDigits [] _ = error "unreachable"
-hasSameDigits (d:ds) s = all (\h -> s !! d == s !! h) ds
+-- given primes with a fixed number of digits
+-- produce all combinations of digit indices to keep and discard
+-- recursively check primes w/ increasing digit counts
+-- return the minimum prime when a non-empty set is found
+smallestPrime0 _ [] = error "smallestPrime0: empty"
+smallestPrime0 n (xs:xss) = if null ys then smallestPrime0 n xss else minimum ys
+    where ys = concatMap (wildPrimes n xs) genDigits
+          ks = [0..(length $ head xs) - 1]
+          genDigits = map (\x -> (x, ks \\ x)) $ tail $ init $ subsequences ks
+smallestPrime n = smallestPrime0 n xs
+    where xs = groupBy ((==) `on` length) $ map (toDigitsBase 10) allPrimes
 
-dropDigits ds s = elems $ a // (zip ds $ repeat 'Z')
-    where a = listArray (0, length s - 1) s
-
-groupPrimes ds d = groupBy ((==) `on` fst) $ sortBy (compare `on` fst) ps
-    where ps = [ (dropDigits ds s, p) | p <- dprimes d,
-                    let s = show p, hasSameDigits ds s ]
-
-filteredPrimes d = [ snd $ head p | ds <- subsequences [0..d-1], length ds > 0,
-                     p <- groupPrimes ds d, length p >= nn ]
-
-bestPrime = head [ minimum ps | ps <- map filteredPrimes [2..], length ps > 0 ]
-
-main = putStrLn $ show $ bestPrime
+main = putStrLn $ show $ smallestPrime nn

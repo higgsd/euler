@@ -1,15 +1,14 @@
 -- 249
+import Euler(fromDigits, toDigitsBase)
+
 nn = 10000
-mm = 50
+kk = 50
 
-isPalindrome n = show n == (reverse $ show n)
+countLychrel k n = length $ filter isLychrel [1..n]
+    where isLychrel x = null $ dropWhile (not.isPalin) $
+                        take k $ tail $ iterate genLychrel x
+          genLychrel x = x + getPalin x
+          isPalin x = x == getPalin x
+          getPalin x = fromDigits $ reverse $ toDigitsBase 10 x
 
-nextLychrel n = n + (read $ reverse $ show n)
-
-countLychrel i n
-    | isPalindrome n = True
-    | i == 0 = False
-    | otherwise = countLychrel (i-1) $ nextLychrel n
-isLychrel n = countLychrel mm $ nextLychrel n
-
-main = putStrLn $ show $ length [() | n <- [0..nn], not $ isLychrel n]
+main = putStrLn $ show $ countLychrel kk nn

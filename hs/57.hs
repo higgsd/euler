@@ -1,14 +1,11 @@
 -- 153
-nn = 1000
+import Euler(toDigitsBase)
 
-nextExp ((n0,n1),(d0,d1)) = ((n1,n2),(d1,d2))
-    where n2 = n0 + n1 * 2
-          d2 = d0 + d1 * 2
+kk = 1000
 
-genExp = build ((1,3),(1,2))
-    where build xs = xs : (build $ nextExp xs)
+countLarger k = length $ filter moreDigits $ take k $ iterate genSqrt (3,2)
+    where moreDigits (n,d) = countDigits n > countDigits d
+          countDigits x = length $ toDigitsBase 10 x
+          genSqrt (n,d) = (d*2+n, n+d)
 
-biggerExp ((_,n),(_,d)) = ndigits n > ndigits d
-    where ndigits x = length $ show x
-
-main = putStrLn $ show $ length [() | x <- take nn genExp, biggerExp x]
+main = putStrLn $ show $ countLarger kk

@@ -3,4 +3,6 @@ import Euler(digitSum)
 
 nn = 99
 
-main = putStrLn $ show $ maximum $ map digitSum [a ^ b | a <- [1..nn], b <- [1..nn]]
+maxDigitSum n = maximum $ map digitSum [a^b | a <- [1..n], b <- [1..n]]
+
+main = putStrLn $ show $ maxDigitSum nn
