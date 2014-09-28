@@ -1,6 +1,7 @@
 INPUT = $(wildcard [0-9]*.hs)
 PROGRAMS = $(basename $(INPUT))
-GHCFLAGS = -Wall -O2 --make
+GHCFLAGS += --make -Wall -O2
+#GHCFLAGS += -Werror
 GHCFLAGS += -fno-warn-type-defaults -fno-warn-missing-signatures \
             -fno-warn-unused-do-bind
 #GHCFLAGS += -prof -auto-all
@@ -19,7 +20,7 @@ GHCFLAGS += -fno-warn-type-defaults -fno-warn-missing-signatures \
 
 .PHONY: all clean test
 all: $(PROGRAMS)
-Euler.o: Euler.hs
+Euler.o: Euler.hs Makefile
 	ghc $(GHCFLAGS) $<
 	@touch $@
 test: $(addsuffix .test,$(PROGRAMS))

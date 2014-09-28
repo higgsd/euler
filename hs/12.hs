@@ -1,9 +1,9 @@
 -- 76576500
-import Euler(allDivisors, triangular)
+import Euler(divisorPowerSum, triangular)
 
 nn = 500
 
-findTri n = fst $ head $ filter (\(_,x) -> x > n) $
-            map (\x -> (x, length $ allDivisors x)) triangular
+-- divisorPowerSum 0 is the number of divisors
+findTri n = head $ filter (\x -> divisorPowerSum 0 x > n) triangular
 
 main = putStrLn $ show $ findTri nn

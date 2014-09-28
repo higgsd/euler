@@ -1,13 +1,12 @@
 -- 303963552391
-import Data.List(group, sort)
-import Euler(intSqrt, primeFactorsP, primeSieve)
+import Euler(primeFactors)
 
 nn = 1000000
-primes = primeSieve $ intSqrt nn
 
-phi n = n * num `div` den
-    where fs = map head $ group $ sort $ primeFactorsP primes n
-          num = product $ map (\x -> x - 1) fs
-          den = product fs
+-- count positive integers that are smaller than and relatively prime to x
+totient x = x * n `div` d
+    where fs = map fst (primeFactors x)
+          n = product $ map (+ (-1)) fs
+          d = product fs
 
-main = putStrLn $ show $ sum $ map phi [2..nn]
+main = putStrLn $ show $ sum $ map totient [2..nn]

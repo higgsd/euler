@@ -1,6 +1,5 @@
 -- 180180
-import Data.List(group)
-import Euler(primeFactorsP)
+import Euler(allPrimes, divisorPowerSum)
 
 nn = 1000
 
@@ -19,20 +18,16 @@ nn = 1000
 -- y is primary constraint, di = negative
 -- order matters, y > x
 -- number of solutions = 1/2 number of divisors of n^2
+
 -- num divisors = sigma0(n)
--- sigma0(n) = product over prime divisors [prime power + 1]
--- sigma0(n^2) = product over prime divisors [2 * prime power + 1]
--- 24^2 = (2^3 * 3^1)^2, sigma0(n^2) = (2*3+1)(2*1+1) = 21
+-- each unique divisor of n increases sigma0(n^2) by 3
+-- because sigma0(n^2) = product of [2 * power + 1]
+-- use smallest divisors, number based on 3^n vs solution count
+-- construct candidates from prime multiples
 
-genSigmas [] = []
-genSigmas (n:ns)
-    | any (> maximum primes) fs = genSigmas ns
-    | otherwise = (x,n) : genSigmas ns
-    where primes = [2,3,5,7,11,13,17]
-          fs = primeFactorsP primes n
-          as = map length $ group fs
-          x = product $ map (\a -> 2*a+1) as
+findSolution n = head $ filter hasNSolutions cs
+    where k = head $ filter (\x -> 3^x > n) [1..]
+          cs = map (\x -> x * (product $ take (k-2) allPrimes)) [1..]
+          hasNSolutions x = divisorPowerSum 0 (x^2) > n*2
 
-findSolution = snd $ head $ dropWhile (\x -> fst x <= nn*2) $ genSigmas [1..]
-
-main = putStrLn $ show $ findSolution
+main = putStrLn $ show $ findSolution nn

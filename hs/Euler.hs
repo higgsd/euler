@@ -1,8 +1,8 @@
 module Euler (
     intSqrt, wordScore, nChooseK, solveQuadratic, modPow,
     fibonacci, triangular, pentagonal, hexagonal,
-    allPrimes, primeSieve, primeFactors, primeFactorsP, allDivisors,
-    allDivisorsP, isPrimeSimple,
+    allPrimes, primeSieve, primeFactors, primeFactorsP,
+    divisorPowerSum, isPrimeSimple,
     digitUsage, digitUsagePad, digitSum, toDigitsBase, fromDigits,
     readMatrix, readWords,
 
@@ -14,9 +14,10 @@ import Control.Applicative((<*), many)
 import qualified Data.Attoparsec.ByteString.Char8 as AP
 import Data.ByteString.Char8(pack)
 import Data.Char(ord)
-import Data.List((\\), genericSplitAt, nub, sort, subsequences)
+import Data.List((\\), genericSplitAt, nub, subsequences)
 import Data.Ratio((%), numerator)
 import Math.NumberTheory.Primes.Sieve(primes)
+import Math.NumberTheory.Primes.Factorisation(factorise, sigma)
 
 -- misc
 intSqrt n = floor $ sqrt $ fromIntegral n
@@ -53,16 +54,11 @@ hexagonal = genHex 0 1
 allPrimes = primes
 primeSieve n = takeWhile (n>=) primes
 
-primeFactorsP [] n = [n]
-primeFactorsP (p:ps) n
-    | p > intSqrt n = [n]
-    | m == 0 = p : primeFactorsP (p:ps) d
-    | otherwise = primeFactorsP ps n
-    where (d,m) = n `divMod` p
-primeFactors n = primeFactorsP allPrimes n
+primeFactors = factorise
 
-allDivisorsP ps n = sort $ nub $ map product $ subsequences $ primeFactorsP ps n
-allDivisors n = allDivisorsP (primeSieve $ intSqrt n) n
+-- sigma 0 is the number of divisors
+-- sigma 1 is the sum of all divisors
+divisorPowerSum = sigma
 
 isPrimeSimple n
     | n < 2 = False
@@ -110,6 +106,13 @@ readWords s = case AP.parseOnly (lineParser <* AP.endOfInput) (pack s) of
                 return v
 
 -- XXX unsorted
+primeFactorsP [] n = [n]
+primeFactorsP (p:ps) n
+    | p > intSqrt n = [n]
+    | m == 0 = p : primeFactorsP (p:ps) d
+    | otherwise = primeFactorsP ps n
+    where (d,m) = n `divMod` p
+
 radicalSieve n = map calcRad [0..n]
     where calcRad y = (y, product $ nub $ primeFactorsP pp y)
           pp = primeSieve $ intSqrt n
