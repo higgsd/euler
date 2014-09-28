@@ -16,10 +16,12 @@ import Data.ByteString.Char8(pack)
 import Data.Char(ord)
 import Data.List((\\), genericSplitAt, nub, subsequences)
 import Data.Ratio((%), numerator)
+import Math.NumberTheory.Moduli(powerModInteger)
 import Math.NumberTheory.Primes.Sieve(primes)
 import Math.NumberTheory.Primes.Factorisation(factorise, sigma)
 
 -- misc
+modPow b x m = powerModInteger b x m
 intSqrt n = floor $ sqrt $ fromIntegral n
 wordScore w = sum $ map (fromIntegral.score) w
     where score c = ord c - ord 'A' + 1
@@ -33,12 +35,6 @@ solveQuadratic a b c
     where delta = sqrt (b * b - 4 * a * c)
           r1 = (delta - b) / (2 * a)
           r2 = (-delta - b) / (2 * a)
-
--- binary method = x^n mod d
-modPow x n d = fst $ iterate modPow0 (1, (x `mod` d, n)) !! v
-    where v = (floor $ logBase 2 $ fromIntegral n) + 1
-          modPow0 (r,(b,e)) = (if odd e then r*b `mod` d else r,
-                               (b^2 `mod` d, e `div` 2))
 
 -- sequences
 fibonacci = 1:genFib 0 1

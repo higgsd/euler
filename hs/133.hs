@@ -13,7 +13,7 @@ tt = 20
 --                   10^n mod 9p = 1
 -- R(10^n) when 10^(10^n) mod 9p = 1
 
-dividesR p = any (dividesR0 p) [1..tt]
-    where dividesR0 x n = modPow 10 (10^n) (9*x) == 1
+dividesR p = any dividesR0 [1..tt]
+    where dividesR0 n = modPow 10 (10^n) (9*p) == 1
 
 main = putStrLn $ show $ sum $ filter (not.dividesR) $ primeSieve nn
