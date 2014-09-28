@@ -14,9 +14,9 @@ import Control.Applicative((<*), many)
 import qualified Data.Attoparsec.ByteString.Char8 as AP
 import Data.ByteString.Char8(pack)
 import Data.Char(ord)
-import Data.List((\\), nub, sort, subsequences)
+import Data.List((\\), genericSplitAt, nub, sort, subsequences)
 import Data.Ratio((%), numerator)
-import Math.Sieve.ONeill(primes)
+import Math.NumberTheory.Primes.Sieve(primes)
 
 -- misc
 intSqrt n = floor $ sqrt $ fromIntegral n
@@ -73,7 +73,7 @@ isPrimeSimple n
 -- digits
 countDigits0 [] ns = ns
 countDigits0 (x:xs) ns = countDigits0 xs ns2
-    where (a,b) = splitAt x ns
+    where (a,b) = genericSplitAt x ns
           ns2 = a ++ [head b + 1] ++ (drop 1 b)
 countDigits xs = countDigits0 xs $ replicate 10 0
 

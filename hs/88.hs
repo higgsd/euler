@@ -1,5 +1,5 @@
 -- 7587457
-import Data.List((\\), delete, intersect, nub, sort)
+import Data.List((\\), delete, genericLength, intersect, nub, sort)
 import Euler(primeFactorsP, primeSieve)
 
 kk = 12000
@@ -21,7 +21,7 @@ genCoverage n
     | n `elem` primes = []
     | otherwise = ys
     where xs = genPerms $ primeFactorsP primes n
-          ys = nub $ map (\x -> n - sum x + length x) xs
+          ys = nub $ map (\x -> n - sum x + genericLength x) xs
 
 calcSums0 [] _ s = s
 calcSums0 ks n s

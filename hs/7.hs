@@ -1,8 +1,8 @@
 -- 104743
-import Math.Sieve.ONeill(primesToNth)
+import Euler(allPrimes)
 
-nn = 10001
+nn = 10000
 
-getPrime n = last $ primesToNth n
+getNthPrime n = allPrimes !! n
 
-main = putStrLn $ show $ getPrime nn
+main = putStrLn $ show $ getNthPrime nn
