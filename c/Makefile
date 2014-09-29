@@ -1,4 +1,4 @@
-INPUT = $(wildcard [0-9]*.c)
+INPUT = $(shell ls -1 [0-9]*.c | sort -n)
 PROGRAMS = $(basename $(INPUT))
 CFLAGS += -O2 -Wall
 LDFLAGS += -lgmp

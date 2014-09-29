@@ -1,4 +1,4 @@
-INPUT = $(wildcard [0-9]*.py)
+INPUT = $(shell ls -1 [0-9]*.py | sort -n)
 PROGRAMS = $(basename $(INPUT))
 
 %.test: %.py

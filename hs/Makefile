@@ -1,4 +1,4 @@
-INPUT = $(wildcard [0-9]*.hs)
+INPUT = $(shell ls -1 [0-9]*.hs | sort -n)
 PROGRAMS = $(basename $(INPUT))
 GHCFLAGS += --make -Wall -O2
 #GHCFLAGS += -Werror
