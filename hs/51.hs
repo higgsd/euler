@@ -3,6 +3,11 @@ import Data.Function(on)
 import Data.List((\\), groupBy, sortBy, subsequences)
 import Euler(allPrimes, fromDigits, toDigitsBase)
 
+-- TODO:
+-- divisibility by two => last digit can't be wildcarded
+-- divisibility by three => 3 digits must be wildcarded
+-- smallest number in an 8-set => smallest prime must wildcard 0, 1, or 2
+
 nn = 8
 
 -- given a sequence of primes (broken into digits)
