@@ -19,6 +19,7 @@ import Data.Ratio((%), numerator)
 import Math.NumberTheory.Moduli(powerModInteger)
 import Math.NumberTheory.Primes.Sieve(primes)
 import Math.NumberTheory.Primes.Factorisation(factorise, sigma)
+import Math.NumberTheory.Primes.Testing(isPrime)
 
 -- misc
 modPow b x m = powerModInteger b x m
@@ -46,21 +47,15 @@ pentagonal = genPent 0 1
 hexagonal = genHex 0 1
     where genHex p i = (p+i) : genHex (p+i) (i+4)
 
--- primes, factoring, etc.
+-- primes, factoring, divisors, etc.
 allPrimes = primes
 primeSieve n = takeWhile (n>=) primes
-
+isPrimeSimple = isPrime
 primeFactors = factorise
 
 -- sigma 0 is the number of divisors
 -- sigma 1 is the sum of all divisors
 divisorPowerSum = sigma
-
-isPrimeSimple n
-    | n < 2 = False
-    | n == 2 = True
-    | even n = False
-    | otherwise = all (\p -> n `mod` p /= 0) [3,5..intSqrt n]
 
 -- digits
 countDigits0 [] ns = ns

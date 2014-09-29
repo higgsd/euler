@@ -1,10 +1,10 @@
 -- 5777
 import Data.List.Ordered(minus)
-import Euler(allPrimes, intSqrt)
+import Math.NumberTheory.Powers.Squares(isSquare)
+import Euler(allPrimes)
 
 goldFail = head $ filter (not.isGold) $ [3,5..] `minus` allPrimes
-    where isSquare x = x == (intSqrt x)^2
-          isGold x = any isSquare $ map (\y -> (x-y) `div` 2) $
+    where isGold x = any isSquare $ map (\y -> (x-y) `div` 2) $
                      takeWhile (x>) $ drop 1 allPrimes
 
 main = putStrLn $ show $ goldFail

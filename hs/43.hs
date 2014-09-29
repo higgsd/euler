@@ -2,6 +2,8 @@
 import Data.List(delete)
 import Euler(fromDigits, primeSieve)
 
+-- incrementally construct pandigital values
+-- check prime requirements with each recursion
 genDigits xs [] _ = [xs]
 genDigits _ _ [] = error "genDigits: empty"
 genDigits xs ys (p:ps) = concat [genDigits (x:xs) (delete x ys) ps | x <- ys,
