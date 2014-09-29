@@ -1,16 +1,19 @@
 -- 983
-import Data.List(sort)
+import Data.Function(on)
+import Data.List(maximumBy)
+import Euler(primeSieve, modPow)
 
 nn = 1000
 
--- cannot just check r1 == 1, for cases like 1/6
-repCycle r d xs n
-    | r2 == 0 = 0
-    | r2 `elem` xs = d
-    | otherwise = repCycle r2 (d+1) (r2:xs) n
-    where r2 = r * 10 `mod` n
+-- repetend length of 1/x is always less than x
+-- since repetends of 1/pq is LCM(Tp, Tq),
+-- reciprocals will be longest for 1/p where p is a prime
 
-longestRepCycle n = snd $ last $ sort $ genRepCycle
-    where genRepCycle = map (\x -> (repCycle 1 1 [1] x, x)) [2..n]
+-- length of repetends of 1/p = multiplicative order of 10 mod p
+multOrder a n = (length $ takeWhile notOrder [2..]) + 2
+    where notOrder x = modPow a x n /= 1
 
-main = putStrLn $ show $ longestRepCycle nn
+longestRep n = maximumBy (compare `on` multOrder 10) xs
+    where xs = filter (\x -> x /= 2 && x /= 5) $ primeSieve n
+
+main = putStrLn $ show $ longestRep nn
