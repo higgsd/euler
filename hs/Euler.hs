@@ -11,7 +11,8 @@ module Euler (
     isSpecialSumSet, repunitAN
 ) where
 import Control.Applicative((<*), many)
-import qualified Data.Attoparsec.ByteString.Char8 as AP
+import qualified Data.Attoparsec.ByteString.Char8 as
+       AP(char, decimal, endOfInput, endOfLine, notChar, parseOnly, sepBy)
 import Data.ByteString.Char8(pack)
 import Data.Char(ord)
 import Data.List((\\), genericSplitAt, nub, subsequences)

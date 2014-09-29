@@ -1,6 +1,7 @@
 -- 376
 import Control.Applicative((<*))
-import qualified Data.Attoparsec.ByteString.Char8 as AP
+import qualified Data.Attoparsec.ByteString.Char8 as
+        AP(char, endOfInput, endOfLine, inClass, parseOnly, satisfy, sepBy)
 import Data.ByteString.Char8(pack)
 import Data.Char(ord)
 import Data.List(group, sort)

@@ -1,7 +1,7 @@
 -- 837799
 import Data.Function(on)
 import Data.List(maximumBy)
-import qualified Data.Map.Strict as M
+import qualified Data.Map.Strict as M(assocs, fromList, insert, lookup)
 
 nn = 1000000
 

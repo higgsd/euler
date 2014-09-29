@@ -1,9 +1,9 @@
 -- 8581146
 import Data.List(sort)
-import qualified Data.Map.Strict as Map
+import qualified Data.Map.Strict as M(fromList, insert, lookup)
 
 nn = 10000000
-base = Map.fromList [(sortDigits 1,0), (sortDigits 89,1)]
+base = M.fromList [(sortDigits 1,0), (sortDigits 89,1)]
 
 splitDigits n
     | n < 10 = [n]
@@ -16,10 +16,10 @@ nextItem n = x * x + nextItem (n `div` 10)
 
 searchChains ks n
     | r2 /= -1 = (r2, ks)
-    | otherwise = (r, Map.insert ns r ks2)
+    | otherwise = (r, M.insert ns r ks2)
     where ns = sortDigits n
           (r,ks2) = searchChains ks $ nextItem n
-          r2 = case Map.lookup ns ks of
+          r2 = case M.lookup ns ks of
                Nothing -> -1
                Just x -> x
 

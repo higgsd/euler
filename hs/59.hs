@@ -1,6 +1,7 @@
 -- 107359
 import Control.Applicative((<*))
-import qualified Data.Attoparsec.ByteString.Char8 as AP
+import qualified Data.Attoparsec.ByteString.Char8 as
+        AP(char, decimal, endOfInput, endOfLine, parseOnly, sepBy)
 import Data.Bits(xor)
 import Data.ByteString.Char8(pack)
 import Data.Char(chr, isPrint, ord)
