@@ -1,23 +1,30 @@
 -- 6531031914842725
-import Data.List(permutations)
+import Data.List((\\))
+import Euler(fromDigits, toDigitsBase)
 
-toFiveGon [a,b,c,d,e,f,g,h,i,j] =
-    [[a,b,c],[d,c,e],[f,e,g],[h,g,i],[j,i,b]]
-toFiveGon _ = error "unreachable"
+nn = 5
 
-gonIsMagic xs = any (==10) (z:zs) && all (z<) zs && all (y==) ys
-    where (y:ys) = map sum xs
-          (z:zs) = map head xs
+-- construct N-gon recursively
+-- first enumerated edge first, must be smallest edge
+-- then add remaining edges, must contain largest edge (for 16-digit string)
+-- then add remaining centers, construct digit string, and check for magic
+buildGons n gs
+    | ng == n = if isMagic then [ys] else []
+    | ng == 0 = concat [buildGons n [a] | a <- [1..n]]
+    | ng < nh = concat [buildGons n (a:gs) | a <- [last gs+1..n] \\ gs]
+    | ng == nh && n `notElem` gs = []
+    | otherwise = concat [buildGons n (a:gs) | a <- [1..n-1] \\ gs]
+    where nh = n `div` 2
+          ng = length gs
+          as = reverse $ drop nh gs
+          bs = take nh gs
+          cs = drop 1 $ cycle bs
+          ys = zipWith3 (\a b c -> [a,b,c]) as bs cs
+          (z:zs) = map sum ys
+          isMagic = all (z==) zs
 
-gonToVal :: [[Int]] -> Integer
-gonToVal xs = read $ toString xs
-    where toString [] = []
-          toString (y:ys) = concat (map show y) ++ toString ys
+-- last item may not be largest due to digit sorting of "10"
+bestGon n = maximum $ map toString $ buildGons (2*n) []
+    where toString xs = fromDigits $ concat $ map (toDigitsBase 10) $ concat xs
 
-bestGon xs = maximum vs
-    where ps = permutations xs
-          gs = map toFiveGon ps
-          ms = filter gonIsMagic gs
-          vs = map gonToVal ms
-
-main = putStrLn $ show $ bestGon [1..10]
+main = putStrLn $ show $ bestGon nn

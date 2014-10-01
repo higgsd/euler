@@ -1,31 +1,26 @@
 -- 28684
-nn = 6
-pp = 4
-bb = 10 ^ pp
-aa = 10 ^ (pp-1)
+import Euler(triangular, square, pentagonal, hexagonal, heptagonal, octagonal)
 
-polyn = [genf p | p <- take nn $ [poly3, poly4, poly5, poly6, poly7, poly8]]
-    where genf f = filter (\x -> x `mod` 100 >= 10) $
-                   takeWhile (bb >) $ dropWhile (aa >=) $ map f [1..]
-          poly3 n = n * (n+1) `div` 2
-          poly4 n = n * n
-          poly5 n = n * (3 * n - 1) `div` 2
-          poly6 n = n * (2 * n - 1)
-          poly7 n = n * (5 * n - 3) `div` 2
-          poly8 n = n * (3 * n - 2)
+kk = 4
 
-isCyclic a b = a `mod` 100 == b `div` 100
+-- when constructing sets, accumulate both values and sequences in use
+-- start initial set with the smallest sequence, to search faster
+-- ignore all values from sequences already in use
+-- also discard all values that can't be 4-digit cyclic
+findCycle k xs ns
+    | length xs == length ps = if cyclic (head xs) (last xs)
+                               then [xs] else []
+    | null xs = concat [findCycle k (x:xs) (n:ns) |
+                        let (n,fs) = last ps, x <- fs]
+    | otherwise = concat [findCycle k (x:xs) (n:ns) |
+                          (n,fs) <- ps, n `notElem` ns,
+                          x <- fs, cyclic (head xs) x]
+    where cyclic x y = x `mod` 100 == y `div` 100
+          ps = zip [0..] $ map genSeq [triangular, square, pentagonal,
+                                       hexagonal, heptagonal, octagonal]
+          genSeq f = filter (\x -> x `mod` 100 <= 9) $
+                     dropWhile (10^(k-1)>=) $ takeWhile ((10^k-1) >) f
 
-nextItems vs ns = [(v:vs, n:ns) | n <- [1..nn-1], not $ n `elem` ns,
-                                  v <- polyn !! n, not $ v `elem` vs,
-                                  isCyclic (head vs) v]
+sumCycle k = sum $ head $ findCycle k [] []
 
-nextCycle [] = []
-nextCycle ((vs,ns):xs) = nextItems vs ns ++ nextCycle xs
-
-findCycle 1 = [([v], [0]) | v <- polyn !! 0]
-findCycle n = nextCycle $ findCycle (n-1)
-
-validCycles = [vs | (vs,_) <- findCycle nn, isCyclic (head vs) (last vs)]
-
-main = putStrLn $ show $ sum $ head $ validCycles
+main = putStrLn $ show $ sumCycle kk

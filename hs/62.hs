@@ -1,17 +1,16 @@
 -- 127035954683
 import Data.Function(on)
 import Data.List(groupBy, sort, sortBy)
+import Euler(toDigitsBase)
 
 nn = 5
 
-cubes = map (^3) [1..]
-cubePairs = [(sort $ show x, x) | x <- cubes]
-cubeBlocks = groupBy ((==) `on` (length . fst)) cubePairs
+findPerms0 n xs = if length ps /= 0 then ps else findPerms0 n (tail xs)
+    where ps = filter (\ys -> length ys == n) $ groupBy ((==) `on` snd) $
+                      sortBy (compare `on` snd) $ head xs
 
-getPerms xs = filter (\x -> length x == nn) $
-        groupBy ((==) `on` fst) $ sortBy (compare `on` fst) xs
+bestPermValue n = minimum $ map fst $ concat $ findPerms
+    where findPerms = findPerms0 n $ groupBy ((==) `on` length.snd) $
+                      map (\x -> (x, sort $ toDigitsBase 10 x)) $ map (^3) [1..]
 
-findPerm [] = error "unreachable"
-findPerm (x:xs) = getPerms x ++ findPerm xs
-
-main = putStrLn $ show $ minimum $ map snd $ head $ findPerm $ cubeBlocks
+main = putStrLn $ show $ bestPermValue nn

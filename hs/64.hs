@@ -1,18 +1,18 @@
 -- 1322
+import Math.NumberTheory.Powers.Squares(isSquare)
 import Euler(intSqrt)
 
 nn = 10000
 
-genSeq n (a,b,d) = (ax,bx,dx):genSeq n (a,bx,dx)
-    where dx = (n - b ^ 2) `div` d
-          bx = a - ((a + b) `mod` dx)
-          ax = (a + bx) `div` dx
+sqrtSeq n (a,b,d) = (a2,b2,d2):sqrtSeq n (a,b2,d2)
+    where d2 = (n - b ^ 2) `div` d
+          b2 = a - ((a + b) `mod` d2)
+          a2 = (a + b2) `div` d2
 
-genSqrt n
-    | a0 ^ 2 == n = []
-    | otherwise = nseq
-    where a0 = intSqrt n
-          (abd:rseq) = genSeq n (a0,a0,1)
-          nseq = abd:takeWhile (/= abd) rseq
+sqrtLen x = (length $ takeWhile (/= y) ys) + 1
+    where a0 = intSqrt x
+          (y:ys) = sqrtSeq x (a0,a0,1)
 
-main = putStrLn $ show $ length $ filter odd $ map (length . genSqrt) [1..nn]
+countOdds n = length $ filter odd $ map sqrtLen $ filter (not.isSquare) [1..n]
+
+main = putStrLn $ show $ countOdds nn

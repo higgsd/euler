@@ -1,9 +1,12 @@
 -- 49
+import Euler(toDigitsBase)
 
-genPowers a b (f,x)
-    | n > b = if f then [] else genPowers x (b+1) (True,0)
-    | n == b = ():genPowers (a+1) b (False, if f then a else x)
-    | otherwise = genPowers (a+1) b (f,x)
-    where n = length $ show $ a ^ b
+-- 10^p always has length p+1
+countPowers0 p
+    | n == 0 = 0
+    | otherwise = n + countPowers0 (p+1)
+    where powLen x = length $ toDigitsBase 10 (x^p)
+          n = length $ takeWhile (\x -> p == powLen x) [9,8..1]
+countPowers = countPowers0 1
 
-main = putStrLn $ show $ length $ genPowers 1 1 (True,0)
+main = putStrLn $ show $ countPowers

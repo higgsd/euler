@@ -1,15 +1,12 @@
 -- 272
+import Data.Ratio((%), numerator)
+import Euler(digitSum)
+
 nn = 100
 
-f = drop 3 $ reverse $ concat $ [[1,n*2,1] | n <- [1..nn `div` 3 + 1]]
+convSum n = digitSum $ numerator $ 2 + (genFrac $ take (n-1) $ genPeriod 1)
+    where genPeriod x = [1,2*x,1] ++ genPeriod (x+1)
+          genFrac [] = 0%1
+          genFrac (x:xs) = 1 / (x + genFrac xs)
 
-calcFrac nd [] = nd
-calcFrac (n,d) (x:xs) = calcFrac (d, x*d + n) xs
-
-getFrac (d:xs) = calcFrac (1,d) xs
-getFrac _ = error "unreachable"
-
-calcNum = n + 2 * d
-    where (n,d) = getFrac f
-
-main = putStrLn $ show $ sum $ map (\c -> read [c]) $ show $ calcNum
+main = putStrLn $ show $ convSum nn

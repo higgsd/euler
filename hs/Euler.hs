@@ -1,6 +1,6 @@
 module Euler (
     intSqrt, wordScore, nChooseK, solveQuadratic, modPow,
-    fibonacci, triangular, pentagonal, hexagonal,
+    fibonacci, triangular, square, pentagonal, hexagonal, heptagonal, octagonal,
     allPrimes, primeSieve, primeFactors, primeFactorsP,
     divisorPowerSum, isPrimeSimple,
     digitUsage, digitUsagePad, digitSum, toDigitsBase, fromDigits,
@@ -41,12 +41,14 @@ solveQuadratic a b c
 -- sequences
 fibonacci = 1:genFib 0 1
     where genFib a b = (a+b) : genFib b (a+b)
-triangular = genTri 0 1
-    where genTri t i = (t+i) : genTri (t+i) (i+1)
-pentagonal = genPent 0 1
-    where genPent p i = (p+i) : genPent (p+i) (i+3)
-hexagonal = genHex 0 1
-    where genHex p i = (p+i) : genHex (p+i) (i+4)
+
+genPoly x n i = (x+n) : genPoly (x+n) (n+i) i
+triangular = genPoly 0 1 1
+square = genPoly 0 1 2
+pentagonal = genPoly 0 1 3
+hexagonal = genPoly 0 1 4
+heptagonal = genPoly 0 1 5
+octagonal = genPoly 0 1 6
 
 -- primes, factoring, divisors, etc.
 allPrimes = primes

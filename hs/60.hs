@@ -4,6 +4,7 @@ import Data.List(groupBy, intersect, subsequences)
 import Data.Map(findWithDefault, fromList, toList)
 import Euler(isPrimeSimple, primeSieve)
 
+-- XXX fix later
 nn = 5
 mm = 10000
 
