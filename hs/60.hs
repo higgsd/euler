@@ -1,40 +1,30 @@
 -- 26033
-import Data.Function(on)
-import Data.List(groupBy, intersect, subsequences)
-import Data.Map(findWithDefault, fromList, toList)
-import Euler(isPrimeSimple, primeSieve)
+import Data.List.Ordered(has)
+import Data.Map.Strict((!), empty, insert, keys)
+import Euler(allPrimes, fromDigits, isPrimeSimple, toDigitsBase)
 
--- XXX fix later
 nn = 5
-mm = 10000
 
-primes = primeSieve mm
+buildSets n xs ys
+    | length xs == n = [sum xs]
+    | otherwise = concat [buildSets n (x:xs) ys2 |
+                          (x,zs) <- ys, let ys2 = pruneSet zs ys]
+    where pruneSet ks rs = filter (\(r,_) -> ks `has` r) rs
+minSet n p xs = if null ys then 0 else minimum ys
+    where ys = buildSets n [p] xs
 
-pairs = [ (a,b) | a <- primes, b <- primes, b > a, isPrimePair a b ]
-    where isPrimeAB a b = isPrimeSimple $ read $ show a ++ show b
-          isPrimePair a b = isPrimeAB a b && isPrimeAB b a
+-- should technically keep searching to confirm first prime set is minimum
+-- use minimum 4-set, done when next prime > current sum + min 4-set
 
-genMap = fromList [([fst $ head p], map snd p) |
-                     p <- groupBy ((==) `on` fst) pairs, length p >= nn - 1]
+findSet0 _ _ [] = error "findSet0: empty"
+findSet0 n t (p:ps) = if s /= 0 then s else findSet0 n t2 ps
+    where s = minSet n p $ zip ks $ map (t!) ks
+          ks = filter isPrimePair (keys t)
+          pd = toDigitsBase 10 p
+          isPrimePair x = isPrimeAB pd (toDigitsBase 10 x) &&
+                          isPrimeAB (toDigitsBase 10 x) pd
+          isPrimeAB a b = isPrimeSimple $ fromDigits (a ++ b)
+          t2 = insert p ks t
+findSet n = findSet0 n empty allPrimes
 
-genSubs xs = filter (\x -> length x == length xs - 1) $ subsequences xs
-
-genVal nk m = foldr intersect f $ map find ks
-    where find k = findWithDefault [] k m
-          f = find $ head $ genSubs nk
-          ks = tail $ genSubs nk
-
-mergeMap m = fromList [(nextKey k i, nextVal k i m) |
-                       (k,v) <- toList m, i <- v,
-                       (length $ nextVal k i m) > 0]
-    where nextKey k i = k ++ [i]
-          nextVal k i mx = genVal (nextKey k i) mx
-
-genXPrimes 2 = genMap
-genXPrimes n = mergeMap $ genXPrimes (n-1)
-
-genPrimes n = [ a ++ [p] | (a,b) <- toList $ genXPrimes n, p <- b ]
-
-minSum = minimum $ map sum $ genPrimes nn
-
-main = putStrLn $ show $ minSum
+main = putStrLn $ show $ findSet nn

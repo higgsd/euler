@@ -1,5 +1,6 @@
 module Euler (
     intSqrt, wordScore, nChooseK, solveQuadratic, modPow,
+    sqrtExpansion, expConvergents,
     fibonacci, triangular, square, pentagonal, hexagonal, heptagonal, octagonal,
     allPrimes, primeSieve, primeFactors, primeFactorsP,
     divisorPowerSum, isPrimeSimple,
@@ -18,6 +19,7 @@ import Data.Char(ord)
 import Data.List((\\), genericSplitAt, nub, subsequences)
 import Data.Ratio((%), numerator)
 import Math.NumberTheory.Moduli(powerModInteger)
+import Math.NumberTheory.Powers.Squares(isSquare)
 import Math.NumberTheory.Primes.Sieve(primes)
 import Math.NumberTheory.Primes.Factorisation(factorise, sigma)
 import Math.NumberTheory.Primes.Testing(isPrime)
@@ -37,6 +39,33 @@ solveQuadratic a b c
     where delta = sqrt (b * b - 4 * a * c)
           r1 = (delta - b) / (2 * a)
           r2 = (-delta - b) / (2 * a)
+
+-- periodic fractions
+-- see https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#
+-- Continued_fraction_expansion
+
+genSqrtExp (a,(s,a0,m,d)) = (a2,(s,a0,m2,d2))
+    where m2 = d*a - m
+          d2 = (s - m2^2) `div` d
+          a2 = (a0 + m2) `div` d2
+
+-- returns (integer portion, [periodic continued fraction values]
+sqrtExpansion s = if isSquare s then (a0, []) else (a0, xs ++ [y])
+    where a0 = intSqrt s
+          as = map fst $ drop 1 $ iterate genSqrtExp (a0,(s,a0,0,1))
+          (xs,(y:_)) = break (==2*a0) as
+
+-- takes an expansion as provided by sqrtExpansion or similar
+-- returns an infinite list of (numerator,denominator) convergents
+genConv _ _ [] = error "genConv: empty"
+genConv (x0,y0) (x1,y1) (b:bs) = (x2,y2) : genConv (x1,y1) (x2,y2) bs
+    where x2 = b*x1 + x0
+          y2 = b*y1 + y0
+expConvergents (_,[]) = error "expConvergents: empty"
+expConvergents (b0,bs@(b1:_)) = ab0 : ab1 : genConv ab0 ab1 xs
+    where ab0 = (b0,1)
+          ab1 = (b0*b1+1,b1)
+          xs = drop 1 $ cycle bs
 
 -- sequences
 fibonacci = 1:genFib 0 1
