@@ -1,12 +1,10 @@
 -- 303963552391
-import Euler(primeFactors)
+import Math.NumberTheory.Primes.Factorisation(totientSieve, sieveTotient)
 
 nn = 1000000
 
--- count positive integers that are smaller than and relatively prime to x
-totient x = x * n `div` d
-    where fs = map fst (primeFactors x)
-          n = product $ map (+ (-1)) fs
-          d = product fs
+-- proper fractions w/ denominator x = totient x
+countFracs n = sum $ map (sieveTotient s) [2..n]
+    where s = totientSieve n
 
-main = putStrLn $ show $ sum $ map totient [2..nn]
+main = putStrLn $ show $ countFracs nn

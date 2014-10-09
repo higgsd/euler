@@ -1,5 +1,5 @@
 module Euler (
-    intSqrt, wordScore, nChooseK, solveQuadratic, modPow,
+    intSqrt, wordScore, nChooseK, digitFactorial, solveQuadratic, modPow,
     sqrtExpansion, expConvergents,
     fibonacci, triangular, square, pentagonal, hexagonal, heptagonal, octagonal,
     allPrimes, primeSieve, primeFactors, primeFactorsP,
@@ -33,6 +33,9 @@ wordScore w = sum $ map (fromIntegral.score) w
 
 nChooseK _ 0 = 1
 nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
+
+digitFactorial n = map calcFact [0..9] !! n
+    where calcFact x = product [2..x]
 
 solveQuadratic a b c
     | r1 >= 0 = r1

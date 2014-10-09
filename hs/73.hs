@@ -1,19 +1,17 @@
 -- 7295372
-import Data.Ratio((%), denominator)
+mm = 12000
+nn1 = 1
+dd1 = 3
+nn2 = 1
+dd2 = 2
 
-nn = 12000
-an = 1
-ad = 3
-bn = 1
-bd = 2
-aa = an % ad
-bb = bn % bd
+-- count proper fractions in the (range] for the given denominator
+countFrac n1 d1 n2 d2 d = length $ filter isProper [x1..x2]
+    where isProper x = gcd d x == 1
+          x1 = (d*n1) `div` d1 + 1
+          x2 = (d*n2) `div` d2
 
-frange n = [n1..n2]
-    where n1 = ((n * an) `div` ad) + 1
-          n2 = (n * bn) `div` bd
+-- count proper fractions in the (range], minus one to produce (range)
+countFracs n1 d1 n2 d2 m = (sum $ map (countFrac n1 d1 n2 d2) [2..m]) - 1
 
-genFracs x = [f | d <- [1..x], n <- frange d, let f = n % d,
-              denominator f == d, aa < f && f < bb]
-
-main = putStrLn $ show $ length $ genFracs nn
+main = putStrLn $ show $ countFracs nn1 dd1 nn2 dd2 mm

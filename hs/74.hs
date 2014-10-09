@@ -1,18 +1,23 @@
 -- 402
-import Data.Char(ord)
+import Data.Array((!), bounds, listArray)
+import Euler(digitFactorial, toDigitsBase)
 
 nn = 1000000
 mm = 60
+xx2 = [871, 45361, 872, 45362]
+xx3 = [169, 36301, 1454]
 
-nextFact n = sum $ map fact $ digits n
-    where fact 0 = 1
-          fact x = product [1..x]
-          digits x = map (\c -> ord c - ord '0') $ show x
+factSum x = sum $ map digitFactorial $ toDigitsBase 10 x
 
-factLen n
-    | any (n==) [1,2,145,40585] = 1
-    | any (n==) [871,45361,872,45362] = 2
-    | any (n==) [169,363601,1454] = 3
-    | otherwise = 1 + (factLen $ nextFact n)
+factLength a x2 x3 n
+    | n > (snd $ bounds a) = 1 + factLength a x2 x3 (factSum n)
+    | a ! n == n = 1
+    | n `elem` x2 = 2
+    | n `elem` x3 = 3
+    | otherwise = 1 + factLength a x2 x3 (a!n)
 
-main = putStrLn $ show $ length $ filter (\x -> factLen x == mm) [1..nn]
+countFactLength x2 x3 n m =
+        length $ filter (\x -> factLength a x2 x3 x == m) [1..n]
+    where a = listArray (1,n) $ map factSum [1..n]
+
+main = putStrLn $ show $ countFactLength xx2 xx3 nn mm
