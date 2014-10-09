@@ -11,6 +11,7 @@ module Euler (
     splitOn, loadMatrixFile,
     isSpecialSumSet, repunitAN
 ) where
+
 import Control.Applicative((<*), many)
 import qualified Data.Attoparsec.ByteString.Char8 as
        AP(char, decimal, endOfInput, endOfLine, notChar, parseOnly, sepBy)
@@ -62,10 +63,10 @@ genConv (x0,y0) (x1,y1) (b:bs) = (x2,y2) : genConv (x1,y1) (x2,y2) bs
     where x2 = b*x1 + x0
           y2 = b*y1 + y0
 expConvergents (_,[]) = error "expConvergents: empty"
-expConvergents (b0,bs@(b1:_)) = ab0 : ab1 : genConv ab0 ab1 xs
+expConvergents (b0,(b1:bs)) = ab0 : ab1 : genConv ab0 ab1 xs
     where ab0 = (b0,1)
           ab1 = (b0*b1+1,b1)
-          xs = drop 1 $ cycle bs
+          xs = cycle $ bs ++ [b1]
 
 -- sequences
 fibonacci = 1:genFib 0 1

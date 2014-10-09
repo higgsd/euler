@@ -1,24 +1,22 @@
 -- 8319823
-import Data.List(sort)
-import Euler(intSqrt, primeSieve)
+import Data.Function(on)
+import Data.List(minimumBy, sort)
+import Euler(allPrimes, intSqrt, toDigitsBase)
 
--- lowest phi will be produced by multiplying two primes closest to nn
--- reduce search space by only considering primes "near" sqrt(nn)
-nn = 10 ^ 7
-ff = intSqrt nn `div` 10
-primes = dropWhile (ff>) $ primeSieve $ nn `div` ff
+nn = 10^7
 
--- phi(n) = n * PRODUCT [p|n] (1 - 1/p)
--- where p are all prime factors of n
-phi xs = (product xs) * num `div` den
-    where num = product $ map (\x -> x - 1) xs
-          den = product xs
+-- minimize n / phi(n) by finding maximal phi(n)
+-- fewer factors => higher phi number, so build n from two primes
+-- only check primes within +/- order of magnitude of sqrt(n)
+totientPerms n = [(x,p) | a <- aPrimes, b <- bPrimes a,
+                          let x = a*b, let p = (a-1)*(b-1), isPerm x p]
+    where q = intSqrt n
+          aPrimes = takeWhile (q>) $ dropWhile (q `div` 10>) allPrimes
+          bPrimes a = takeWhile (n `div` a>) $ dropWhile (a>) allPrimes
+          isPerm a b = permSort a == permSort b
+          permSort x = sort $ toDigitsBase 10 x
 
-phiRatio xs = (fromIntegral $ product xs) / (fromIntegral $ phi xs)
+bestPerm n = fst $ minimumBy (compare `on` phiRatio) $ totientPerms n
+    where phiRatio (x,p) = fromIntegral x / fromIntegral p
 
-isPerm n m = (sort $ show n) == (sort $ show m)
-
-allPhi2Perms = [ (phiRatio xs, n) | a <- primes, b <- primes, let xs = [a,b],
-                 let n = product xs, nn > n, isPerm n $ phi xs ]
-
-main = putStrLn $ show $ snd $ minimum $ allPhi2Perms
+main = putStrLn $ show $ bestPerm nn

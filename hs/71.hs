@@ -1,16 +1,10 @@
 -- 428570
-import Data.List(sort)
-import Data.Ratio((%), numerator, denominator)
-
 mm = 1000000
-cc = 1000
 nn = 3
 dd = 7
-ff = nn % dd
 
-getNearFrac d = (d * nn `div` dd) % d
+-- first denominator with maximum modulus will be nearest
+getNearestNum n d m = n*dx `div` d
+    where dx = head $ filter (\x -> x `mod` d == d-1) [m,m-1..]
 
-nearestFracs = sort $ [ f | d <- [mm,mm-1..mm-cc], let f = getNearFrac d,
-                 f /= ff, denominator f == d ]
-
-main = putStrLn $ show $ numerator $ last $ nearestFracs
+main = putStrLn $ show $ getNearestNum nn dd mm
