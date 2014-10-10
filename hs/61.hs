@@ -4,7 +4,7 @@ import Euler(triangular, square, pentagonal, hexagonal, heptagonal, octagonal)
 kk = 4
 
 -- when constructing sets, accumulate both values and sequences in use
--- start initial set with the smallest sequence, to search faster
+-- start initial set with smallest sequence (octagonal), to search faster
 -- ignore all values from sequences already in use
 -- also discard all values that can't be 4-digit cyclic
 findCycle k xs ns
@@ -18,7 +18,7 @@ findCycle k xs ns
     where cyclic x y = x `mod` 100 == y `div` 100
           ps = zip [0..] $ map genSeq [triangular, square, pentagonal,
                                        hexagonal, heptagonal, octagonal]
-          genSeq f = filter (\x -> x `mod` 100 <= 9) $
+          genSeq f = filter (\x -> x `mod` 100 > 9) $
                      dropWhile (10^(k-1)>=) $ takeWhile ((10^k-1) >) f
 
 sumCycle k = sum $ head $ findCycle k [] []

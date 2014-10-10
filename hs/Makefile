@@ -25,4 +25,4 @@ Euler.o: Euler.hs Makefile
 	@touch $@
 test: $(addsuffix .test,$(PROGRAMS))
 clean:
-	rm -f $(PROGRAMS) *.hi *.o *.prof
+	rm -f $(PROGRAMS) *.hi *.o *.prof *.ld_*

@@ -1,6 +1,6 @@
 module Euler (
-    intSqrt, wordScore, nChooseK, digitFactorial, solveQuadratic, modPow,
-    sqrtExpansion, expConvergents,
+    intSqrt, wordScore, nChooseK, countPartitionsA, countPartitions,
+    digitFactorial, solveQuadratic, modPow, sqrtExpansion, expConvergents,
     fibonacci, triangular, square, pentagonal, hexagonal, heptagonal, octagonal,
     allPrimes, primeSieve, primeFactors, primeFactorsP,
     divisorPowerSum, isPrimeSimple,
@@ -15,6 +15,7 @@ module Euler (
 import Control.Applicative((<*), many)
 import qualified Data.Attoparsec.ByteString.Char8 as
        AP(char, decimal, endOfInput, endOfLine, notChar, parseOnly, sepBy)
+import Data.Array((!), listArray)
 import Data.ByteString.Char8(pack)
 import Data.Char(ord)
 import Data.List((\\), genericSplitAt, nub, subsequences)
@@ -34,6 +35,18 @@ wordScore w = sum $ map (fromIntegral.score) w
 nChooseK _ 0 = 1
 nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
 
+-- https://en.wikipedia.org/wiki/Partition_(number_theory)#Recurrence_formula
+-- unbounded list and map memoization are both too slow
+-- bounds are required for arrays
+countPartitionsA b = a
+    where a = listArray (0,b) $ map countParts [0..b]
+          countParts 0 = 1
+          countParts n = sum $ zipWith (*) (cycle [1,1,-1,-1]) (sumParts n)
+          sumParts n = map (a!) (sumTerms n)
+          sumTerms n = map (n-) $ takeWhile (n>=) $ drop 1 generalizedPentagonal
+countPartitions n = countPartitionsA n ! n
+
+-- memoized
 digitFactorial n = map calcFact [0..9] !! n
     where calcFact x = product [2..x]
 
@@ -82,6 +95,9 @@ pentagonal = genPoly 0 1 3
 hexagonal = genPoly 0 1 4
 heptagonal = genPoly 0 1 5
 octagonal = genPoly 0 1 6
+
+generalizedPentagonal = scanl (+) 0 xs
+    where xs = concat $ zipWith (\x y -> [x]++[y]) [1,3..] [1..]
 
 -- primes, factoring, divisors, etc.
 allPrimes = primes

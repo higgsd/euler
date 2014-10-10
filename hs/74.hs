@@ -1,23 +1,31 @@
 -- 402
-import Data.Array((!), bounds, listArray)
+import Data.Map.Strict((!), fromList, insert, toList)
+import qualified Data.Map.Strict as M(lookup)
 import Euler(digitFactorial, toDigitsBase)
+
+-- XXX: figure out why counting target lengths as the tree is built is slower
 
 nn = 1000000
 mm = 60
-xx2 = [871, 45361, 872, 45362]
-xx3 = [169, 36301, 1454]
 
-factSum x = sum $ map digitFactorial $ toDigitsBase 10 x
+-- these are the only non-singleton loops, hardcode them
+xx = [(871,2), (45361,2), (872,2), (45362,2), (169,3), (36301,3), (1454,3)]
 
-factLength a x2 x3 n
-    | n > (snd $ bounds a) = 1 + factLength a x2 x3 (factSum n)
-    | a ! n == n = 1
-    | n `elem` x2 = 2
-    | n `elem` x3 = 3
-    | otherwise = 1 + factLength a x2 x3 (a!n)
+-- recursively construct a tree, mapping start values to chain lengths
+-- tree is built on-demand, until it hits a singleton or known value
+-- then lengths are filled in for future caching
+-- later lookups may be redundant, so ignore them
+updateTree t x = case M.lookup x t of
+        Just _ -> t
+        Nothing -> t3
+    where x2 = sum $ map digitFactorial $ toDigitsBase 10 x
+          t2 = updateTree t x2
+          t3 = if x == x2 then insert x 1 t
+               else insert x (1 + t2!x2) t2
 
-countFactLength x2 x3 n m =
-        length $ filter (\x -> factLength a x2 x3 x == m) [1..n]
-    where a = listArray (1,n) $ map factSum [1..n]
+countFactLength x n m = length $ filter (==m) $ map snd $ toList $
+                        buildTree (fromList x) [1..n]
+    where buildTree t [] = t
+          buildTree t (y:ys) = buildTree (updateTree t y) ys
 
-main = putStrLn $ show $ countFactLength xx2 xx3 nn mm
+main = putStrLn $ show $ countFactLength xx nn mm

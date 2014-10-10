@@ -1,24 +1,23 @@
 -- 161667
-import Data.Array(accumArray, elems)
+import Data.List(sort, group)
 
 nn = 1500000
 
--- pythagorian triple generator
-primTri m n
-    | n >= m = primTri (m+1) 1          -- invalid pair, next m
-    | p > nn && n == 1 = []             -- m still too big, done
-    | p > nn = primTri (m+1) 1          -- n too big, next m
-    | even (m - n) = primTri m (n+1)    -- m-n must be odd, next n
-    | gcd m n /= 1 = primTri m (n+1)    -- must be coprime, next n
-    | otherwise = p : primTri m (n+1)   -- keep, next n
-    where p = 2 * m * (m + n)
+-- generate all primitive pythagorean triples w/ Euclid's formula
+-- a = m^2 - n^2, b = 2mn, c = m^2 + n^2
+-- m - n is odd and m and n are coprime
+genTri x m n
+    | n >= m = genTri x (m+1) 1         -- invalid pair, next m
+    | n == 1 && p > x = []              -- perimeter too big, done
+    | p > x = genTri x (m+1) 1          -- perimeter too big, next m
+    | even (m-n) = genTri x m (n+1)     -- m-n must be odd, next n
+    | gcd m n /= 1 = genTri x m (n+2)   -- must be coprime, next n
+    | otherwise = p : genTri x m (n+2)  -- keep, next n
+    where p = 2*m*(m+n)
 
-multTri [] _ = []
-multTri (p:ps) k
-    | p * k > nn = multTri ps 1
-    | otherwise = p * k : multTri (p:ps) (k+1)
+-- generate all pythagorean triples by multiplying by constant factors
+-- count how many of each there are and count unique perimeters
+countTri p = length $ filter (==1) $ map length $ group $ sort $
+             concatMap (\x -> takeWhile (p>=) $ map (x*) [1..]) $ genTri p 1 1
 
-allTri = multTri (primTri 1 1) 1
-accumTri = accumArray (+) 0 (1,nn) [(p,1) | p <- allTri]
-
-main = putStrLn $ show $ length $ filter (==1) $ elems accumTri
+main = putStrLn $ show $ countTri nn
