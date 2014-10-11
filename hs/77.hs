@@ -3,18 +3,19 @@ import Data.List(group, sort)
 import Euler(primeSieve)
 
 mm = 5000
-nn = 100 -- guess
-primes = primeSieve nn
+bb = 100 -- guess
 
-primeSums s (p:ps)
+primeSums b s (p:ps)
     | p > r = [s]
     | length ps == 0 = nextSums
-    | otherwise = concat [ primeSums ss ps | ss <- nextSums ]
-    where nextSums = [ s + p * n | n <- [0..r `div` p] ]
-          r = nn - s
-primeSums _ [] = error "unreachable"
+    | otherwise = concat [primeSums b s2 ps | s2 <- nextSums]
+    where nextSums = [s+p*n | n <- [0..r `div` p]]
+          r = b - s
+primeSums _ _ [] = error "unreachable"
 
-sumCounts = map (\xs -> (length xs, head xs)) $
-        group $ sort $ primeSums 0 primes
+sumCounts b = map (\xs -> (length xs, head xs)) $
+        group $ sort $ primeSums b 0 $ primeSieve b
 
-main = putStrLn $ show $ snd $ head $ dropWhile (\p -> fst p < mm) sumCounts
+findMinPartition b m = snd $ head $ filter (\(n,_) -> n > m) $ sumCounts b
+
+main = putStrLn $ show $ findMinPartition bb mm
