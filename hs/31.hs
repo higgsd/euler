@@ -1,8 +1,9 @@
 -- 73682
+import Euler(countPartsRestricted)
+
 nn = 200
-cc = [200,100,50,20,10,5,2]
+cc = [1,2,5,10,20,50,100,200]
 
-coinCombs _ [] = 1
-coinCombs n (c:cs) = sum [coinCombs (n-v) cs | v <- [0,c..n]]
+countChangeWays n c = countPartsRestricted c !! n
 
-main = putStrLn $ show $ coinCombs nn cc
+main = putStrLn $ show $ countChangeWays nn cc

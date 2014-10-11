@@ -1,6 +1,7 @@
 module Euler (
-    intSqrt, wordScore, nChooseK, countPartitionsA, countPartitions,
-    digitFactorial, solveQuadratic, modPow, sqrtExpansion, expConvergents,
+    intSqrt, wordScore, digitFactorial, solveQuadratic, modPow, sqrtExpansion,
+    expConvergents,
+    nChooseK, countPartsA, countParts, countPartsRestricted,
     fibonacci, triangular, square, pentagonal, hexagonal, heptagonal, octagonal,
     allPrimes, primeSieve, primeFactors, primeFactorsP,
     divisorPowerSum, isPrimeSimple,
@@ -18,7 +19,8 @@ import qualified Data.Attoparsec.ByteString.Char8 as
 import Data.Array((!), listArray)
 import Data.ByteString.Char8(pack)
 import Data.Char(ord)
-import Data.List((\\), genericSplitAt, nub, subsequences)
+import Data.List((\\), genericDrop, genericReplicate, genericSplitAt,
+                 genericTake, nub, subsequences)
 import Data.Ratio((%), numerator)
 import Math.NumberTheory.Moduli(powerModInteger)
 import Math.NumberTheory.Powers.Squares(isSquare)
@@ -31,20 +33,6 @@ modPow b x m = powerModInteger b x m
 intSqrt n = floor $ sqrt $ fromIntegral n
 wordScore w = sum $ map (fromIntegral.score) w
     where score c = ord c - ord 'A' + 1
-
-nChooseK _ 0 = 1
-nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
-
--- https://en.wikipedia.org/wiki/Partition_(number_theory)#Recurrence_formula
--- unbounded list and map memoization are both too slow
--- bounds are required for arrays
-countPartitionsA b = a
-    where a = listArray (0,b) $ map countParts [0..b]
-          countParts 0 = 1
-          countParts n = sum $ zipWith (*) (cycle [1,1,-1,-1]) (sumParts n)
-          sumParts n = map (a!) (sumTerms n)
-          sumTerms n = map (n-) $ takeWhile (n>=) $ drop 1 generalizedPentagonal
-countPartitions n = countPartitionsA n ! n
 
 -- memoized
 digitFactorial n = map calcFact [0..9] !! n
@@ -83,6 +71,33 @@ expConvergents (b0,(b1:bs)) = ab0 : ab1 : genConv ab0 ab1 xs
     where ab0 = (b0,1)
           ab1 = (b0*b1+1,b1)
           xs = cycle $ bs ++ [b1]
+
+-- combinatorics
+nChooseK _ 0 = 1
+nChooseK n k = numerator $ product [(n+1-i) % i | i <- [1..k]]
+
+-- https://en.wikipedia.org/wiki/Partition_(number_theory)#Recurrence_formula
+-- unbounded list and map memoization are both too slow
+-- bounds are required for arrays
+countPartsA b = a
+    where a = listArray (0,b) $ map calcParts [0..b]
+          calcParts 0 = 1
+          calcParts n = sum $ zipWith (*) (cycle [1,1,-1,-1]) (sumParts n)
+          sumParts n = map (a!) (sumTerms n)
+          sumTerms n = map (n-) $ takeWhile (n>=) $ drop 1 generalizedPentagonal
+countParts n = countPartsA n ! n
+
+-- count partitions using specific part sizes, e.g. coins
+-- accepts a potentially-infinite list of part sizes, in increasing order
+-- returns an infinite list of partition counts for each index
+countPartsR ps i _ [] = genericDrop i ps
+countPartsR ps i j (x:xs) = r ++ countPartsR ps2 j x xs
+    where ps2 = a ++ zipWith (+) b ps2
+          (a,b) = genericSplitAt x ps
+          r = genericTake (j-i) $ genericDrop i ps
+countPartsRestricted [] = error "countPartsRestricted: empty"
+countPartsRestricted (x:xs) = countPartsR ps 0 x xs
+    where ps = cycle $ 1:genericReplicate (x-1) 0
 
 -- sequences
 fibonacci = 1:genFib 0 1
