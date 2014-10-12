@@ -1,32 +1,29 @@
 -- 73162890
-import Data.List(nub)
+import Data.List(group, nub, sort)
 
-keysLeft k ks = map keyLeft ks
-    where keyLeft [] = []
-          keyLeft (x:xs)
-            | k == x = xs
-            | otherwise = x:xs
+unmatchedKey _ [] = []
+unmatchedKey [] ks = ks
+unmatchedKey ps key@(k:ks)
+    | null ps2 = key
+    | otherwise = unmatchedKey (tail ps2) ks
+    where ps2 = dropWhile (/=k) ps
 
-nextKeys (xs,ks) = zip xs2 ks3
-    where (xs2,ks2) = unzip [(x:xs, keysLeft x ks) | x <- nub $ map head ks]
-          dropEmpty ys = filter (\x -> not $ null x) ys
-          ks3 = map dropEmpty ks2
+-- recursively find the shortest key by constructing all possible pins
+-- takes a list of keys and a list of candidate PINs (strings)
+-- greedy depth-first algorithm would run much faster, but may not be shortest
+-- does not assume PIN contents are not repeated 
+findKey ks ps
+    | null sols = findKey ks (concatMap addNext rs)
+    | otherwise = head $ map fst sols
+    where getUnmatched p = (p, map (unmatchedKey p) ks)
+          rs = map getUnmatched ps
+          sols = filter (all null.snd) rs
+          addNext (p,xs) = map (\x -> p++[x]) $ map head $ group $ sort $
+                           map head $ filter (not.null) xs
 
-buildNextKeys [] = []
-buildNextKeys (x:xs) = nextKeys x ++ buildNextKeys xs
-
-getShortestKey [] = []
-getShortestKey ((x,[]):_) = x
-getShortestKey (_:xs) = getShortestKey xs
-
-shortKeySearch xs
-    | null key = shortKeySearch xs2
-    | otherwise = key
-    where xs2 = buildNextKeys xs
-          key = getShortestKey xs2
-
-findShortestKey k = reverse $ shortKeySearch [("",k)]
+-- some lines are repeated, ignore them
+findShortestKey s = findKey (nub $ lines s) [""]
 
 main = do
-    contents <- readFile "../files/keylog.txt"
-    putStrLn $ findShortestKey $ lines contents
+    s <- readFile "../files/keylog.txt"
+    putStrLn $ findShortestKey s
