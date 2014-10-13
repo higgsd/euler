@@ -101,16 +101,13 @@ countPartsRestricted (x:xs) = countPartsR ps 0 x xs
     where ps = cycle $ 1:genericReplicate (x-1) 0
 
 -- sequences
-fibonacci = 1:genFib 0 1
-    where genFib a b = (a+b) : genFib b (a+b)
-
-genPoly x n i = (x+n) : genPoly (x+n) (n+i) i
-triangular = genPoly 0 1 1
-square = genPoly 0 1 2
-pentagonal = genPoly 0 1 3
-hexagonal = genPoly 0 1 4
-heptagonal = genPoly 0 1 5
-octagonal = genPoly 0 1 6
+fibonacci = map fst $ iterate (\(a,b) -> (b,a+b)) (1,1)
+triangular = scanl (+) 1 [2..]
+square = scanl (+) 1 [3,5..]
+pentagonal = scanl (+) 1 [4,7..]
+hexagonal = scanl (+) 1 [5,9..]
+heptagonal = scanl (+) 1 [6,11..]
+octagonal = scanl (+) 1 [7,13..]
 
 generalizedPentagonal = scanl (+) 0 xs
     where xs = concat $ zipWith (\x y -> [x]++[y]) [1,3..] [1..]
