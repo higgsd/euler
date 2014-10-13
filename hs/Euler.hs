@@ -6,6 +6,7 @@ module Euler (
     allPrimes, primeSieve, primeFactors, primeFactorsP,
     divisorPowerSum, isPrimeSimple,
     digitUsage, digitUsagePad, digitSum, toDigitsBase, fromDigits,
+    walkMatrixRight, walkMatrixLeft, walkMatrixUp, walkMatrixDown,
     parseList, listParser, readGrid, readMatrix, readWords,
 
     radicalSieve,
@@ -20,7 +21,7 @@ import Data.Array((!), listArray)
 import Data.ByteString.Char8(pack)
 import Data.Char(ord)
 import Data.List((\\), genericDrop, genericReplicate, genericSplitAt,
-                 genericTake, nub, subsequences)
+                 genericTake, nub, subsequences, transpose)
 import Data.Ratio((%), numerator)
 import Math.NumberTheory.Moduli(powerModInteger)
 import Math.NumberTheory.Powers.Squares(isSquare)
@@ -145,6 +146,20 @@ toDigitsBase0 b n
 toDigitsBase b n = reverse $ toDigitsBase0 b n
 
 fromDigits ds = sum $ zipWith (*) (reverse ds) (iterate (10*) 1)
+
+-- matrix traversal
+walkMatrixRight m s = map (\(x,y) -> sumRow x y) $ zip m s
+    where sumRow _ [y] = [y]
+          sumRow (_:x:xs) (y1:y2:ys) = y1 : sumRow (x:xs) (sumCell x y1 y2:ys)
+          sumRow _ _ = error "sumRow: invalid"
+          sumCell x y1 y2 = if y1 == -1 then -1 else
+                            if y2 == -1 then x+y1 else min y2 (x+y1)
+walkMatrixLeft m s = map reverse $
+                     walkMatrixRight (map reverse m) (map reverse s)
+walkMatrixDown m s = transpose $ walkMatrixRight (transpose m) (transpose s)
+walkMatrixUp m s = u $ walkMatrixRight (r m) (r s)
+    where r x = map reverse $ transpose x
+          u x = transpose $ map reverse x
 
 -- parsing
 parseList p s = case AP.parseOnly (p <* AP.endOfInput) (pack s) of

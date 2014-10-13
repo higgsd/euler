@@ -1,29 +1,16 @@
 -- 427337
-import Data.List(transpose)
-import Euler(readMatrix)
+import Euler(readMatrix, walkMatrixDown, walkMatrixRight)
 
-sumCell xx y yy
-    | y == -1 = -1
-    | yy == -1 = xx + y
-    | otherwise = min yy (xx + y)
-
-sumRow _ [y] = [y]
-sumRow (_:xx:xs) (y:yy:ys) = y : sumRow (xx:xs) (y2:ys)
-    where y2 = sumCell xx y yy
-sumRow _ _ = error "sumRow"
-
-sumRight m s = map (\(x,y) -> sumRow x y) $ zip m s
-sumDown m s = transpose $ sumRight (transpose m) (transpose s)
-
+-- walk rows repeatedly until matrix converges
+-- get resulting sum from bottom corner
 bestPath0 m s
     | s == s2 = last $ last s
     | otherwise = bestPath0 m s2
-    where s2 = sumDown m $ sumRight m s
-bestPath m = bestPath0 m s
-    where s = [(head $ head m):drop 1 srow] ++ (replicate (nr-1) srow)
-          srow = replicate nc (-1)
-          nr = length m
-          nc = length $ head m
+    where s2 = walkMatrixDown m $ walkMatrixRight m s
+bestPath m@(r@(h:_):_) = bestPath0 m s
+    where s = [h:drop 1 srow] ++ replicate (length m-1) srow
+          srow = replicate (length r) (-1)
+bestPath _ = error "bestPath: empty"
 
 main = do
     s <- readFile "../files/matrix.txt"
