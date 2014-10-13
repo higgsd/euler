@@ -6,10 +6,10 @@ module Euler (
     allPrimes, primeSieve, primeFactors, primeFactorsP,
     divisorPowerSum, isPrimeSimple,
     digitUsage, digitUsagePad, digitSum, toDigitsBase, fromDigits,
-    readMatrix, readWords,
+    parseList, listParser, readGrid, readMatrix, readWords,
 
     radicalSieve,
-    splitOn, loadMatrixFile,
+    splitOn,
     isSpecialSumSet, repunitAN
 ) where
 
@@ -147,17 +147,16 @@ toDigitsBase b n = reverse $ toDigitsBase0 b n
 fromDigits ds = sum $ zipWith (*) (reverse ds) (iterate (10*) 1)
 
 -- parsing
-readMatrix s = case AP.parseOnly (matrixParser <* AP.endOfInput) (pack s) of
-                Left e -> error $ "readMatrix: " ++ e
+parseList p s = case AP.parseOnly (p <* AP.endOfInput) (pack s) of
+                Left e -> error $ "readList: " ++ e
                 Right xs -> filter (not.null) xs
-    where matrixParser = lineParser `AP.sepBy` AP.endOfLine
-          lineParser = AP.decimal `AP.sepBy` (AP.char ' ')
+listParser c f = lineParser c f `AP.sepBy` AP.endOfLine
+lineParser c f = f `AP.sepBy` (AP.char c)
 
-readWords s = case AP.parseOnly (lineParser <* AP.endOfInput) (pack s) of
-                Left e -> error $ "readWords: " ++ e
-                Right xs -> xs
-    where lineParser = wordParser `AP.sepBy` (AP.char ',')
-          wordParser = do
+readGrid s = parseList (listParser ' ' AP.decimal) s
+readMatrix s = parseList (listParser ',' AP.decimal) s
+readWords s = parseList (lineParser ',' wordParser) s
+    where wordParser = do
                 AP.char '"'
                 v <- many $ AP.notChar '"'
                 AP.char '"'
@@ -182,10 +181,6 @@ splitOn c s = cons (case break (== c) s of
         [] -> []
         (_:s3) -> splitOn c s3))
     where cons ~(h, t) = h : t
-
-loadMatrixFile fname = do
-    contents <- readFile fname
-    return $ map (\x -> map read $ splitOn ',' x) $ lines contents
 
 isSpecialSumSet a
     | nub a /= a = False

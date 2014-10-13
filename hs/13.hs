@@ -1,11 +1,11 @@
 -- 5537376230
-import Euler(fromDigits, readMatrix, toDigitsBase)
+import Euler(fromDigits, readGrid, toDigitsBase)
 
 nn = 10
 
 calcSum n xs = fromDigits $ take n $ toDigitsBase 10 $ sum $ head xs
 
-main = putStrLn $ show $ calcSum nn $ readMatrix ss
+main = putStrLn $ show $ calcSum nn $ readGrid ss
 
 ss = "\
 \37107287533902102798797998220837590246510135740250 \

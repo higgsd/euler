@@ -1,5 +1,5 @@
 -- 7273
-import Euler(readMatrix)
+import Euler(readGrid)
 
 -- accumulate best path from the bottom-up
 sumTri0 [[x]] = x
@@ -11,4 +11,4 @@ bestTriPath t = sumTri0 $ reverse t
 
 main = do
     s <- readFile "../files/triangle.txt"
-    putStrLn $ show $ bestTriPath $ readMatrix s
+    putStrLn $ show $ bestTriPath $ readGrid s

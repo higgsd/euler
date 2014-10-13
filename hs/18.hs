@@ -1,5 +1,5 @@
 -- 1074
-import Euler(readMatrix)
+import Euler(readGrid)
 
 -- accumulate best path from the bottom-up
 sumTri0 [[x]] = x
@@ -9,7 +9,7 @@ sumTri0 (x:y:ys) = sumTri0 (yy:ys)
 sumTri0 _ = error "sumTri0: empty"
 bestTriPath t = sumTri0 $ reverse t
 
-main = putStrLn $ show $ bestTriPath $ readMatrix tt
+main = putStrLn $ show $ bestTriPath $ readGrid tt
 
 tt = "\
 \75\n\

@@ -1,5 +1,5 @@
 -- 70600674
-import Euler(readMatrix)
+import Euler(readGrid)
 
 kk = 4
 
@@ -22,7 +22,7 @@ gridProd g xs
 
 bestGridProd g k = maximum $ map (gridProd g) $ genLines g k
 
-main = putStrLn $ show $ bestGridProd (readMatrix gg) kk
+main = putStrLn $ show $ bestGridProd (readGrid gg) kk
 
 gg = "\
 \08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08\n\

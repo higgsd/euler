@@ -1,17 +1,11 @@
 -- 376
-import Control.Applicative((<*))
-import qualified Data.Attoparsec.ByteString.Char8 as
-        AP(char, endOfInput, endOfLine, inClass, parseOnly, satisfy, sepBy)
-import Data.ByteString.Char8(pack)
+import qualified Data.Attoparsec.ByteString.Char8 as AP(inClass, satisfy)
 import Data.Char(ord)
 import Data.List(group, sort)
+import Euler(listParser, parseList)
 
-readPoker s = case AP.parseOnly (pokerParser <* AP.endOfInput) (pack s) of
-                Left e -> error $ "readPoker: " ++ e
-                Right xs -> map (splitAt 5) $ filter (not.null) xs
-    where pokerParser = handParser `AP.sepBy` AP.endOfLine
-          handParser = cardParser `AP.sepBy` (AP.char ' ')
-          cardParser = do
+readPoker s = map (splitAt 5) $ parseList (listParser ' ' cardParser) s
+    where cardParser = do
             r <- rankParser
             h <- suitParser
             return (r,h)

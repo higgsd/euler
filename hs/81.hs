@@ -1,6 +1,6 @@
 -- 427337
 import Data.List(transpose)
-import Euler(loadMatrixFile)
+import Euler(readMatrix)
 
 sumCell xx y yy
     | y == -1 = -1
@@ -26,5 +26,5 @@ bestPath m = bestPath0 m s
           nc = length $ head m
 
 main = do
-    m <- loadMatrixFile "../files/matrix.txt"
-    putStrLn $ show $ bestPath m
+    s <- readFile "../files/matrix.txt"
+    putStrLn $ show $ bestPath $ readMatrix s

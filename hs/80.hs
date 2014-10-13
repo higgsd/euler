@@ -1,18 +1,20 @@
 -- 40886
-findSqrtDigit p c x
-    | x * (20 * p + x) <= c = findSqrtDigit p c (x+1)
-    | otherwise = x-1
-nextSqrtDigit p c = findSqrtDigit p c 1
+import Data.List(genericLength)
+import Math.NumberTheory.Powers.Squares(isSquare)
 
-genSqrtDigits p c = (x : genSqrtDigits p2 (r * 100))
-    where x = nextSqrtDigit p c
-          y = x * (20 * p + x)
-          p2 = 10 * p + x
-          r = c - y
+nn = 100
+dd = 100
 
-sumSqrtDigits n
-    | n `elem` [x*x | x <- [1..10]] = 0
-    | otherwise = sum $ take 100 $ genSqrtDigits 0 n
+-- https://en.wikipedia.org/wiki/Methods_of_computing_square_roots
+-- #Decimal_.28base_10.29
+sqrtDigit (_,(p,c)) = (x,(p2,c2))
+    where y = x*(20*p+x)
+          x = genericLength $ takeWhile validX [1..9]
+          validX i = i*(20*p+i) <= c
+          p2 = 10*p+x
+          c2 = 100*(c-y)
 
-main = do
-    putStrLn $ show $ sum $ map sumSqrtDigits [1..100]
+sumAllSqrts d n = sum $ concatMap genDigits $ filter (not.isSquare) [1..n]
+    where genDigits x = take d $ map fst $ drop 1 $ iterate sqrtDigit (0,(0,x))
+
+main = putStrLn $ show $ sumAllSqrts dd nn
