@@ -1,20 +1,13 @@
 -- 2772
-import Data.List(sort)
+import Euler(triangular)
 
 nn = 2000000
 
-getTri n = sum [1..n]
-countRects x y = (getTri x) * (getTri y)
+-- number of sub-rectangles = products of length and width triangular numbers
+-- generate all unique combinations of length and width up to the max
+nearestRectCount n = snd $ maximum $ map last $
+                     takeWhile (not.null) $ map countX [1..]
+    where countX x = takeWhile (\(c,_) -> n>=c) [(count x y, x*y) | y <- [x..]]
+          count x y = (triangular !! (x-1)) * (triangular !! (y-1))
 
-genRects x = [(y,countRects x y) | y <- [1..nn]]
-bestRects0 x
-    | y2 == 1 = [(n2 - nn,a2)]
-    | otherwise = (nn - n1,a1) : (n2 - nn,a2) : bestRects0 (x + 1)
-    where (y2,n2) = head $ dropWhile (\(_,n) -> n < nn) $ genRects x
-          a2 = x * y2
-          y1 = y2 - 1
-          a1 = x * y1
-          n1 = countRects x y1
-bestRects = bestRects0 1
-
-main = putStrLn $ show $ snd $ head $ sort $ bestRects
+main = putStrLn $ show $ nearestRectCount nn
