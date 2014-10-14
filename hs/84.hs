@@ -1,8 +1,11 @@
 -- 101524
 import Data.List(genericLength, group, partition, sort, transpose)
 
+-- XXX community chest and chance are only shuffled once, not a random draw
+-- XXX current markov state can't handle that accurately
+
 nn = 3
-dd = 4
+dd = 4  -- XXX figure out why this doesn't give the right result for 6
 
 -- matrix converges to correct answer after 20 iterations
 ii = 50
@@ -58,10 +61,10 @@ rollProbs n p = map listToProb $ group $ sort ds
 
 -- simulate a single turn from the given starting square
 -- produce a non-unique list of (ending square, probability) values
-oneRoll n (s,p) = (map fst m, map fst d)
-    where (m,d) = partition snd $ concatMap (advance s) (rollProbs n p)
-manyRolls n xs = (concat m, concat d)
-    where (m,d) = unzip $ map (oneRoll n) xs
+oneRoll n (s,p) = (map fst d, map fst m)
+    where (d,m) = partition snd $ concatMap (advance s) (rollProbs n p)
+manyRolls n xs = (concat d, concat m)
+    where (d,m) = unzip $ map (oneRoll n) xs
 oneTurn n s = m1 ++ m2 ++ m3 ++ mj
     where (d1,m1) = manyRolls n [(s,1)]
           (d2,m2) = manyRolls n d1
