@@ -1,9 +1,13 @@
 -- 101524
-import Data.Function(on)
-import Data.List(groupBy, sortBy)
-import Data.Ratio((%))
-import Text.Printf(printf)
+import Data.List(genericLength, group, partition, sort, transpose)
 
+nn = 3
+dd = 4
+
+-- matrix converges to correct answer after 20 iterations
+ii = 50
+
+-- square names
 squareNames = ["GO", "A1", "CC1", "A2", "T1",
                "R1", "B1", "CH1", "B2", "B3",
                "JAIL", "C1", "U1", "C2", "C3",
@@ -12,87 +16,72 @@ squareNames = ["GO", "A1", "CC1", "A2", "T1",
                "R3", "F1", "F2", "U2", "F3",
                "G2J", "G1", "G2", "CC3", "G3",
                "R4", "CH3", "H1", "T2", "H2"]
-
-n2s n = case lookup n $ zip squareNames [0..] of
-    Nothing -> error "n2s: invalid name"
+nameToSquare n = case lookup n $ zip squareNames [0..] of
+    Nothing -> error "nameToSquare: invalid name"
     Just i -> i
 
-goNextRailroad s
-    | s > n2s "R1" && s <= n2s "R2" = n2s "R2"
-    | s > n2s "R2" && s <= n2s "R3" = n2s "R3"
-    | s > n2s "R3" && s <= n2s "R4" = n2s "R4"
-    | otherwise = n2s "R1"
+-- given a starting square, distance to advance,
+-- whether it was doubles, and probability
+-- return a list of visited squares, their probabilities,
+-- and whether the visited square the last
+advance s ((r,d),p)
+    | s2 == nameToSquare "G2J" = [((jail, p), True)]
+    | s2 `elem` (map nameToSquare ["CC1","CC2","CC3"]) = chest
+    | s2 `elem` [ch1,ch2,ch3] = chance
+    | otherwise = [((s2, p), d)]
+    where s2 = (s + r) `mod` length squareNames
+          chest = [((go, p/16), d),
+                   ((jail, p/16), True),
+                   ((s2, 14*p/16), d)]
+          chance = [((go, p/16), d),
+                    ((jail, p/16), True),
+                    ((nameToSquare "C1", p/16), d),
+                    ((nameToSquare "E3", p/16), d),
+                    ((nameToSquare "H2", p/16), d),
+                    ((r1, p/16), d),
+                    ((nextRailroad, 2*p/16), d),
+                    ((nextUtility, p/16), d),
+                    ((s2-3, p/16), d), -- cannot wrap
+                    ((s2, 6*p/16), d)]
+          nextRailroad = if s2 == ch1 then nameToSquare "R2" else
+                         if s2 == ch2 then nameToSquare "R3" else r1
+          nextUtility = if s2 == ch1 || s2 == ch3 then
+                        nameToSquare "U1" else nameToSquare "U2"
+          [jail,go,ch1,ch2,ch3,r1] = map nameToSquare
+                                     ["JAIL","GO","CH1","CH2","CH3","R1"]
 
-goNextUtility s
-    | s > n2s "U1" && s <= n2s "U2" = n2s "U2"
-    | otherwise = n2s "U1"
+-- given two dice with n sides
+-- return a list of ((distance, is doubles), probability)
+rollProbs n p = map listToProb $ group $ sort ds
+    where ds = [(a+b, a==b) | a <- [1..n], b <- [1..n]]
+          listToProb xs = (head xs, p * genericLength xs / genericLength ds)
 
-chest s p = [(n2s "GO", p * (1%16), False),
-             (n2s "JAIL", p * (1%16), True),
-             (s, p * (14%16), False)]
+-- simulate a single turn from the given starting square
+-- produce a non-unique list of (ending square, probability) values
+oneRoll n (s,p) = (map fst m, map fst d)
+    where (m,d) = partition snd $ concatMap (advance s) (rollProbs n p)
+manyRolls n xs = (concat m, concat d)
+    where (m,d) = unzip $ map (oneRoll n) xs
+oneTurn n s = m1 ++ m2 ++ m3 ++ mj
+    where (d1,m1) = manyRolls n [(s,1)]
+          (d2,m2) = manyRolls n d1
+          (js,m3) = manyRolls n d2
+          mj = [(nameToSquare "JAIL", sum $ map snd js)]
+probsForSquare d s = map getProb [0..length squareNames - 1]
+    where getProb x = sum $ map snd $ filter (\(v,_) -> x==v) $ oneTurn d s
 
-chance s p = [(n2s "GO", p * (1%16), False),
-              (n2s "JAIL", p * (1%16), True),
-              (n2s "C1", p * (1%16), False),
-              (n2s "E3", p * (1%16), False),
-              (n2s "H2", p * (1%16), False),
-              (n2s "R1", p * (1%16), False),
-              (goNextRailroad s, p * (2%16), False),
-              (goNextUtility s, p * (1%16), False),
-              (s, p * (6%16), False)] ++ advance s (-3) (p * (1%16))
+-- build an initial markov state space, and run it for a number of iterations
+-- XXX detect rather than presume convergence
+runMarkov d t = iterate matrixMult m !! t
+    where m = map (probsForSquare d) [0..length squareNames - 1]
+          matrixMult a = [[sum $ zipWith (*) (m !! i) (transpose a !! j) |
+                          j <- [0..length m-1]] | i <- [0..length m-1]]
 
-advance s d p
-    | s2 == n2s "CC1" = chest s2 p
-    | s2 == n2s "CC2" = chest s2 p
-    | s2 == n2s "CC3" = chest s2 p
-    | s2 == n2s "CH1" = chance s2 p
-    | s2 == n2s "CH2" = chance s2 p
-    | s2 == n2s "CH3" = chance s2 p
-    | s2 == n2s "G2J" = [(n2s "JAIL", p, True)]
-    | otherwise = [(s2, p, False)]
-    where s2 = (s + d) `mod` length squareNames
+-- sort the converged markov state space by square
+-- extract the top n squares, and combine them into a single number
+-- JAIL is 10 and always the most popular, so ignore zero-padding
+popularSquares n d i = sum $ zipWith (*) (iterate (*100) 1) $
+                       reverse $ take n $ reverse $ map snd $
+                       sort $ zip (head $ runMarkov d i) [0..]
 
-rollPair = [(2, 0, 1%16),
-            (3, 2%16, 0),
-            (4, 2%16, 1%16),
-            (5, 4%16, 0),
-            (6, 2%16, 1%16),
-            (7, 2%16, 0),
-            (8, 0, 1%16)]
-
-nextSingle s p = concat [advance s d (p*p2) | (d,p2,_) <- rollPair, p2 /= 0]
-nextDouble s p = concat [advance s d (p*p2) | (d,_,p2) <- rollPair, p2 /= 0]
-nextMove s p = (stopDouble ++ nextSingle s p, againDouble)
-    where stopDouble = filter (\(_,_,t) -> t) $ nextDouble s p
-          againDouble = filter (\(_,_,t) -> not t) $ nextDouble s p
-
-mergeMoveProbs xs = map addProbs $
-                groupBy ((==) `on` fst3) $
-                sortBy (compare `on` fst3) xs
-    where fst3 (x,_,_) = x
-          snd3 (_,x,_) = x
-          addProbs [] = error "mergeMoveProbs: empty list"
-          addProbs ((s,p,_):ys) = (s, p + (sum $ map snd3 ys))
-
-performMove s p = mergeMoveProbs $ m1 ++ m2 ++ m3 ++ d3j
-    where (m1,d1) = nextMove s p
-          concatTuple (x,y) = (concat x, concat y)
-          (m2,d2) = concatTuple $ unzip [nextMove s2 p2 | (s2,p2,_) <- d1]
-          (m3,d3) = concatTuple $ unzip [nextMove s3 p3 | (s3,p3,_) <- d2]
-          d3j = [(n2s "JAIL", p4, t) | (_,p4,t) <- d3]
-
-mergeProbs xs = map addProbs $
-                groupBy ((==) `on` fst) $
-                sortBy (compare `on` fst) xs
-    where addProbs [] = error "mergeProbs: empty list"
-          addProbs ((s,p):ys) = (s, p + (sum $ map snd ys))
-
-performMoves 1 = performMove 0 1
-performMoves n = mergeProbs $ concat performNextMove
-    where performNextMove = [performMove s p | (s,p) <- performMoves (n-1)]
-
-topSquares = reverse $ sortBy (compare `on` snd) $ performMoves 10
-
-main = do
-    printf "%02d%02d%02d\n" (tops !! 0) (tops !! 1) (tops !! 2)
-        where tops = map fst topSquares
+main = putStrLn $ show $ popularSquares nn dd ii
