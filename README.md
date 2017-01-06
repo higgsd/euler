@@ -36,4 +36,5 @@ Haskell
 I am new to Haskell and apologize in advance for the code quality and style.
 Monads aren't entirely mysterious to me, but I've found it much easier to code
 around them when solving problems.  I haven't figured out how to reason about
-CAFs or space/time tradeoffs, and how it relates to point-free style.
+CAFs or space/time tradeoffs, and how it relates to point-free style.  I may
+have gone a bit far in leveraging Hackage libraries to assist...
